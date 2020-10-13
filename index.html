@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZTM App</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+        integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+        crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+        integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+        crossorigin=""></script>
+    <script src="js/mapModule.js" type="module"></script>
+    <script src="js/ztmAPI.js" type="module"></script>
+    <script src="js/app.js" type="module"></script>
+
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+    <h1 id="app-title">ZTM APP</h1>
+    <h2 id="your-location">Cords: <span>testset</span></h2>
+    <div class="container">
+        <div class="data-section">
+            <h2>Where do you want to go?</h2>
+            <div class="form">
+                <form action="#" id="location-form">
+                    <label for="from">From: </label>
+                    <input name="from" type="text">
+                    <label>To: </label>
+                    <input name="to" type="text">
+                    <input type="submit" id="refresh" value="Refresh">
+                </form>
+            </div>
+            <label for="all-vehicles">Show all vehicles <input type="checkbox" id="all-vehicles" name="all-vehicles"
+                    checked></label>
+            <label for="track-target">Track target <input type="checkbox" id="track-target" name="track-target"></label>
+            Dostępne Linie:
+            <select name="line-select" id="line-select"></select>
+            Dostępne pojazdy:
+            <select name="vehicles-select" id="vehicles-select"></select>
+
+            <div id="update-time">Zaktualizowano: <span></span></div>
+            <div id="refresh-time">Odświeżenie za: <span></span> </div>
+            <div class="vehicle-info"></div>
+
+        </div>
+        <div class="map-details">
+            <div id="mapid"></div>
+            <p id="vehicles-amount">Liczba pojazdów: <span></span></p>
+            <p id="max-speed">Prędkość: <span class="speed"></span> pojzadu o kodzie: <span class="speedId"></span></p>
+            <p id="route">Trasa: <span></span></p>
+            <p id="gps-signal">Sygnał gps (0-3): <span></span></p>
+        </div>
+    </div>
+    <div style="font-size: .5rem; margin-top: 5rem">Icons made by <a href="https://www.flaticon.com/authors/freepik"
+            title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a>
+    </div>
+</body>
+
+</html>
