@@ -22,12 +22,13 @@ export function createMap(startCoordinates = [54.49074313834612, 18.469270882244
     // const layerGroup = L.layerGroup([normalLayer, satelitteLayer]).addTo(myMap);
 
     const myMap = L.map('mapid',{
-        layers: [normalLayer, satelitteLayer]
+        layers: [satelitteLayer, normalLayer]
     }).setView(startCoordinates, startZoom);
 
     const baseMaps = {
-        "Normal": normalLayer,
         "Satelitte": satelitteLayer,
+        "Normal": normalLayer,
+
     }
 
     L.control.layers(baseMaps).addTo(myMap);
