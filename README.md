@@ -1,3 +1,3 @@
 # ZTM-APP
-Is jsut app showing location of buses in Gdańsk
+It`s just wesbite showing location of buses in Gdańsk
 ## Just download

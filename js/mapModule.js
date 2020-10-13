@@ -1,15 +1,36 @@
 export function createMap(startCoordinates = [54.49074313834612, 18.46927088224449], startZoom = 11) {
-    let myMap = L.map('mapid').setView(startCoordinates, startZoom);
 
-    L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+    const normalLayer  =  L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
         attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
         maxZoom: 18,
-        // id: 'mapbox/satellite-v9',
+
         id: 'mapbox/streets-v11',
         tileSize: 512,
         zoomOffset: -1,
         accessToken: 'pk.eyJ1IjoiemllbG9ueXkzIiwiYSI6ImNrZnlhcGIxbzFzcDgycHQ4cHV3N3F5bmIifQ.ZC3kl6eDh_Y4McuZgMWtZg'
-    }).addTo(myMap);
+    })
+
+    const satelitteLayer =  L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+        attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+        maxZoom: 18,
+        id: 'mapbox/satellite-v9',
+        tileSize: 512,
+        zoomOffset: -1,
+        accessToken: 'pk.eyJ1IjoiemllbG9ueXkzIiwiYSI6ImNrZnlhcGIxbzFzcDgycHQ4cHV3N3F5bmIifQ.ZC3kl6eDh_Y4McuZgMWtZg'
+    })
+
+    // const layerGroup = L.layerGroup([normalLayer, satelitteLayer]).addTo(myMap);
+
+    const myMap = L.map('mapid',{
+        layers: [normalLayer, satelitteLayer]
+    }).setView(startCoordinates, startZoom);
+
+    const baseMaps = {
+        "Normal": normalLayer,
+        "Satelitte": satelitteLayer,
+    }
+
+    L.control.layers(baseMaps).addTo(myMap);
 
     return myMap;
 }
