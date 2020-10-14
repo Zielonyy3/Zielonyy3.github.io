@@ -3,7 +3,7 @@ import {
     getUserLocation,
     checkMouseClickCoordinates,
     createPin,
-    setNewMarkerLocation
+    setNewMarkerLocation,
 } from './mapModule.js';
 
 import {
@@ -52,6 +52,40 @@ const ztmData = {
     refreshTime: 20,
 }
 
+export function createPopup(vehicleObj, paragraphText, btn1Text, functionToRun) {
+    function createParagraph(text, className, container) {
+        const p = L.DomUtil.create('p', className, container)
+        p.innerHTML = text;
+        return p;
+    }
+
+    function createButton(label, className, container) {
+        const btn = L.DomUtil.create('button', '', container);
+        btn.setAttribute('type', 'button');
+        btn.innerHTML = label;
+        return btn;
+    }
+
+    const popUp = L.popup();
+    const container = L.DomUtil.create('div');
+
+    const topText = createParagraph(paragraphText, '', container),
+        startBtn = createButton(btn1Text, '', container);
+
+    popUp.setContent(container);
+    L.DomEvent.on(startBtn, 'click', () => {
+        myMap.trackedVehicle.VehicleCode = vehicleObj.VehicleCode;
+        refreshAll();
+    })
+
+
+    return popUp;
+}
+
+function runFunction(functionName, param) {
+    functionName(param);
+}
+
 const Vehicle = class {
     constructor(VehicleCode, GPSQuality, cords, Speed, VehicleId, routeId, routeList, mapObj, icon) {
         this.VehicleCode = VehicleCode;
@@ -70,9 +104,9 @@ const Vehicle = class {
 
         this.marker = createPin(mapObj, this.cords, mapObj.icons[icon]);
         if (this.routeName)
-            this.marker.bindPopup(`ID: <b>${this.VehicleCode}</b> <br> Speed: <b>${this.Speed} km/h</b></br> <b>${this.routeName}</b>`);
+            this.marker.bindPopup(createPopup(this, `ID: <b>${this.VehicleCode}</b> <br> Speed: <b>${this.Speed} km/h</b></br> <b>${this.routeName}</b>`, 'Śledz mnie'));
         else
-            this.marker.bindPopup(`ID: <b>${this.VehicleCode}</b> <br> Speed: <b>${this.Speed} km/h</b></br>`)
+            this.marker.bindPopup(`ID: <b>${this.VehicleCode}</b> <br> Speed: <b>${this.Speed} km/h</b></br><button class="popup-btn">Śledź mnie</button>`)
     }
 }
 
