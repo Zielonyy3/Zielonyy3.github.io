@@ -4,6 +4,7 @@ import {
     checkMouseClickCoordinates,
     createPin,
     setNewMarkerLocation,
+    createPopup
 } from './mapModule.js';
 
 import {
@@ -52,36 +53,6 @@ const ztmData = {
     refreshTime: 20,
 }
 
-export function createPopup(vehicleObj, paragraphText, btn1Text, functionToRun) {
-    function createParagraph(text, className, container) {
-        const p = L.DomUtil.create('p', className, container)
-        p.innerHTML = text;
-        return p;
-    }
-
-    function createButton(label, className, container) {
-        const btn = L.DomUtil.create('button', '', container);
-        btn.setAttribute('type', 'button');
-        btn.innerHTML = label;
-        return btn;
-    }
-
-    const popUp = L.popup();
-    const container = L.DomUtil.create('div');
-
-    const topText = createParagraph(paragraphText, '', container),
-        startBtn = createButton(btn1Text, '', container);
-
-    popUp.setContent(container);
-    L.DomEvent.on(startBtn, 'click', () => {
-        myMap.trackedVehicle.VehicleCode = vehicleObj.VehicleCode;
-        refreshAll();
-    })
-
-
-    return popUp;
-}
-
 function runFunction(functionName, param) {
     functionName(param);
 }
@@ -104,7 +75,7 @@ const Vehicle = class {
 
         this.marker = createPin(mapObj, this.cords, mapObj.icons[icon]);
         if (this.routeName)
-            this.marker.bindPopup(createPopup(this, `ID: <b>${this.VehicleCode}</b> <br> Speed: <b>${this.Speed} km/h</b></br> <b>${this.routeName}</b>`, 'Śledz mnie'));
+            this.marker.bindPopup(createPopup(this, `ID: <b>${this.VehicleCode}</b> <br> Speed: <b>${this.Speed} km/h</b></br> <b>${this.routeName}</b>`, 'Śledz mnie', myMap, lineChange));
         else
             this.marker.bindPopup(`ID: <b>${this.VehicleCode}</b> <br> Speed: <b>${this.Speed} km/h</b></br><button class="popup-btn">Śledź mnie</button>`)
     }
@@ -140,11 +111,15 @@ function getTrackedVehicleInfo() {
     if (tempMarker)
         myMap.map.removeLayer(tempMarker)
     tempMarker = {};
-    let vehicle = {};
+    let vehicle;
     ztmData.vehiclesList.forEach(el => {
         if (el.VehicleCode == myMap.trackedVehicle.VehicleCode)
             vehicle = new Vehicle(el.VehicleCode, el.GPSQuality, [el.Lat, el.Lon], el.Speed, el.VehicleId, el.Line, ztmData.routeList, myMap, 'busIcon');
     })
+    if (vehicle == undefined) {
+        alert('Twój pojazd nie jest już dłużej dostępny');
+        start();
+    }
     return vehicle;
 }
 
@@ -202,7 +177,7 @@ function refreshAll() {
             else
                 setNewMarkerLocation(myMap.trackedVehicle, myMap.trackedVehicle.cords);
 
-            console.log(`Pozycja dla ${myMap.trackedVehicle.VehicleCode} ustawiona na %c${myMap.trackedVehicle.cords}`, "color: red");
+            // console.log(`Pozycja dla ${myMap.trackedVehicle.VehicleCode} ustawiona na %c${myMap.trackedVehicle.cords}`, "color: red");
 
             myMap.showAllVehicles = document.querySelector('#all-vehicles').checked
             if (myMap.showAllVehicles) {
@@ -214,16 +189,20 @@ function refreshAll() {
             fillSelects();
             fillInputs();
             ztmData.timer = ztmData.refreshTime;
+            clearInterval(refresh);
+            refresh = setInterval(refreshAll, ztmData.refreshTime * 1000)
         })
 
 }
 
-function lineChange(value) {
+function lineChange(value, vehicleCode) {
     myMap.trackedLine = value;
 
     ztmData.lineVehicles = getLineVehicles(ztmData.linesList, myMap.trackedLine)
-
-    myMap.trackedVehicle.VehicleCode = ztmData.lineVehicles[0];
+    if (!vehicleCode)
+        myMap.trackedVehicle.VehicleCode = ztmData.lineVehicles[0];
+    else
+        myMap.trackedVehicle.VehicleCode = vehicleCode
     myMap.trackedVehicle = getTrackedVehicleInfo();
 
     if (myMap.trackTargetOnMap)
@@ -237,9 +216,8 @@ function lineChange(value) {
     fillInputs();
 }
 
-function vehicleChange(value) {
-    myMap.trackedVehicle.VehicleCode = value;
-
+function vehicleChange(vehicleCode) {
+    myMap.trackedVehicle.VehicleCode = vehicleCode;
     myMap.trackedVehicle = getTrackedVehicleInfo();
     if (myMap.trackTargetOnMap)
         setNewMarkerLocation(myMap.trackedVehicle, myMap.trackedVehicle.cords, myMap);

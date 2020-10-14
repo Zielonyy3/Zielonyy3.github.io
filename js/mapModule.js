@@ -83,6 +83,35 @@ export function createPin(mapObj, cords, iconPNG = false) {
     return marker;
 }
 
+export function createPopup(vehicleObj, paragraphText, btn1Text, mapObj, functionToRun) {
+    function createParagraph(text, className, container) {
+        const p = L.DomUtil.create('p', className, container)
+        p.innerHTML = text;
+        return p;
+    }
+
+    function createButton(label, className, container) {
+        const btn = L.DomUtil.create('button', '', container);
+        btn.setAttribute('type', 'button');
+        btn.innerHTML = label;
+        return btn;
+    }
+    const popUp = L.popup();
+    const container = L.DomUtil.create('div');
+
+    const topText = createParagraph(paragraphText, '', container),
+        startBtn = createButton(btn1Text, '', container);
+
+    popUp.setContent(container);
+    L.DomEvent.on(startBtn, 'click', () => {
+        mapObj.trackedVehicle.VehicleCode = vehicleObj.VehicleCode;
+        functionToRun(vehicleObj.routeId, vehicleObj.VehicleCode);
+    })
+
+
+    return popUp;
+}
+
 export function setNewMarkerLocation(vehicleObj, cords, mapObj = false) {
     let newLatLng = new L.LatLng(cords[0], cords[1]);
     vehicleObj.marker.setLatLng(newLatLng);
