@@ -8,9 +8,12 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
         integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
         crossorigin="" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.1/css/all.css"
+        integrity="sha384-vp86vTRFVJgpjF9jiIGPEEqYqlDwgyBgEF109VFjmqGmIY/Y4HV4d3Gp2irVfcrp" crossorigin="anonymous">
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
         integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
         crossorigin=""></script>
+
     <script src="js/mapModule.js" type="module"></script>
     <script src="js/ztmAPI.js" type="module"></script>
     <script src="js/app.js" type="module"></script>
@@ -19,6 +22,56 @@
 </head>
 
 <body>
+    <div id="main-container">
+
+        <div id="mapid"></div>
+
+        <div id="info-container">
+            <div class="options-row">
+                <span class="checkbox-round">
+                    <input type="checkbox" name="track-target" id="track-target" class="checkbox-round-btn">
+                    <i class="fas fa-location-arrow"></i>
+                </span>
+                <span class="checkbox-round">
+                    <input type="checkbox" name="show-all-vehicle" id="show-all-vehicle" class="checkbox-round-btn"
+                        checked>
+                    <i class="fas fa-bus"></i>
+                </span>
+                <span class="checkbox-round">
+                    <input type="checkbox" name="refresh" id="refresh" class="checkbox-round-btn">
+                    <i class="fas fa-sync-alt"></i>
+                </span>
+
+            </div>
+            <div class="information-row">
+                <div class="general-info-card info-card">
+                    <h2 id="vehicles-amount" class="big-text">Liczba pojazdów: <span></span></h2>
+                    <p id="update-time" class="info-text">Zaktualizowano: <span></span></p>
+                    <p id="refresh-time" class="info-text">Odświeżenie za: <span></span></p>
+                </div>
+                <div class="vehicle-info-card no-active info-card">
+                    <h2 id="tracked-code" class="big-text">Pojazd o kodzie: <span></span></h2>
+                    <p id="tracked-speed" class="info-text">Prędkość: <span></span></p>
+                    <p id="tracked-route" class="info-text">Trasa: <span></span></p>
+                    <p id="gps-signal" class="info-text">Sygnał GPS: <span></span></p>
+                </div>
+                <div class="more-info-card no-active info-card">
+                    <p class="info-text">Dostępne Linie: <span></span></p>
+                    <select name="line-select" id="line-select"></select></br>
+                    <p class="info-text">Dostępne pojazdy: <span></span></p>
+                    <select name="vehicles-select" id="vehicles-select"></select>
+                </div>
+            </div>
+        </div>
+        <div class="buttons-container">
+            <button class="general-info-btn switch-btn active-swtich-btn">Ogólne</button>
+            <button class="vehicle-info-btn switch-btn">Pojazd</button>
+            <button class="more-info-btn switch-btn">Więcej</button>
+        </div>
+    </div>
+    <script src="js/main.js"></script>
+
+    <!-- 
     <h1 id="app-title">ZTM APP</h1>
     <h2 id="your-location">Cords: <span>testset</span></h2>
     <div class="container">
@@ -56,7 +109,9 @@
     </div>
     <div style="font-size: .5rem; margin-top: 5rem">Icons made by <a href="https://www.flaticon.com/authors/freepik"
             title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a>
-    </div>
+    </div> -->
+
+
 </body>
 
 </html>

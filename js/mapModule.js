@@ -44,6 +44,9 @@ export function checkMouseClickCoordinates(e, map) {
 
 export function getUserLocation(map, flyToCords = false, iconPNG = false) {
     if (navigator.geolocation) {
+        const options = {
+            enableHighAccuracy: true
+        }
         navigator.geolocation.getCurrentPosition(position => {
             const cords = [position.coords.latitude, position.coords.longitude]
             let myPostion = L.marker(cords, {
@@ -51,7 +54,7 @@ export function getUserLocation(map, flyToCords = false, iconPNG = false) {
                 fillColor: '#f03',
                 fillOpacity: 0.5,
                 radius: 500
-            }).addTo(map);
+            }, options).addTo(map);
 
             if (iconPNG)
                 myPostion.setIcon(iconPNG);
@@ -62,7 +65,7 @@ export function getUserLocation(map, flyToCords = false, iconPNG = false) {
                     duration: .8
                 });
             }
-            myPostion.bindPopup(`Your location is: </br><b>x: ${cords[0].toFixed(2)}, </br> y: ${cords[1].toFixed(2)}</b>`).openPopup();
+            myPostion.bindPopup(`Your location is: </br><b>x: ${cords[0].toFixed(2)}, </br> y: ${cords[1].toFixed(2)}</b><br> Accuracy: <b>${position.coords.accuracy} m</b>`).openPopup();
             return myPostion;
         });
     } else {

@@ -141,7 +141,7 @@ function start() {
                     myMap.trackedLine = ztmData.linesList[0].lineName;
 
                     ztmData.lineVehicles = getLineVehicles(ztmData.linesList, myMap.trackedLine)
-
+                    console.log('trackedVehicle:', myMap.trackedVehicle, 'lineVehicles:', ztmData.lineVehicles);
                     myMap.trackedVehicle.VehicleCode = ztmData.lineVehicles[0];
                     myMap.trackedVehicle = getTrackedVehicleInfo();
 
@@ -151,7 +151,7 @@ function start() {
                     } else
                         myMap.userMarker = getUserLocation(myMap.map, true, myMap.icons.userIcon);
 
-                    myMap.showAllVehicles = document.querySelector('#all-vehicles').checked
+                    myMap.showAllVehicles = document.querySelector('#show-all-vehicle').checked
                     if (myMap.showAllVehicles)
                         showAllVehiclesMarkers();
                     fillSelects();
@@ -179,7 +179,7 @@ function refreshAll() {
 
             // console.log(`Pozycja dla ${myMap.trackedVehicle.VehicleCode} ustawiona na %c${myMap.trackedVehicle.cords}`, "color: red");
 
-            myMap.showAllVehicles = document.querySelector('#all-vehicles').checked
+            myMap.showAllVehicles = document.querySelector('#show-all-vehicle').checked
             if (myMap.showAllVehicles) {
                 removeAllvehiclesMarkers();
                 showAllVehiclesMarkers();
@@ -247,10 +247,10 @@ function fillSelects() {
 
 function fillInputs() {
     document.querySelector('#vehicles-amount span').textContent = ztmData.vehiclesList.length;
-    document.querySelector('#max-speed .speed').textContent = `${myMap.trackedVehicle.Speed} km/h `;
-    document.querySelector('#max-speed .speedId').textContent = myMap.trackedVehicle.VehicleCode;
+    document.querySelector('#tracked-speed span').textContent = `${myMap.trackedVehicle.Speed} km/h `;
+    document.querySelector('#tracked-code span').textContent = myMap.trackedVehicle.VehicleCode;
     document.querySelector('#gps-signal span').textContent = myMap.trackedVehicle.GPSQuality;
-    document.querySelector('#route span').textContent = myMap.trackedVehicle.routeName;
+    document.querySelector('#tracked-route').textContent = myMap.trackedVehicle.routeName;
     document.querySelector('#update-time span').textContent = ztmData.updateTime;
 }
 
@@ -261,10 +261,10 @@ let timer = setInterval(() => {
 
 let refresh = setInterval(refreshAll, ztmData.refreshTime * 1000)
 
-myMap.showAllVehicles = document.querySelector('#all-vehicles').checked;
+myMap.showAllVehicles = document.querySelector('#show-all-vehicle').checked;
 myMap.trackTargetOnMap = document.querySelector('#track-target').checked;
 
-document.querySelector('#all-vehicles').addEventListener('change', e => toggleAllVehiclesVisibility(e.target))
+document.querySelector('#show-all-vehicle').addEventListener('change', e => toggleAllVehiclesVisibility(e.target))
 document.querySelector('#track-target').addEventListener('change', e => toggleTrackTarget(e.target))
 document.querySelector('#line-select').addEventListener('change', e => lineChange(e.target.value))
 document.querySelector('#vehicles-select').addEventListener('change', e => vehicleChange(e.target.value))
