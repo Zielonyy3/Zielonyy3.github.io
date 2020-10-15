@@ -23,26 +23,46 @@
 
 <body>
     <div id="main-container">
-
-        <div id="mapid"></div>
-
-        <div id="info-container">
-            <div class="options-row">
-                <span class="checkbox-round">
-                    <input type="checkbox" name="track-target" id="track-target" class="checkbox-round-btn">
-                    <i class="fas fa-location-arrow"></i>
-                </span>
-                <span class="checkbox-round">
-                    <input type="checkbox" name="show-all-vehicle" id="show-all-vehicle" class="checkbox-round-btn"
-                        checked>
-                    <i class="fas fa-bus"></i>
-                </span>
-                <span class="checkbox-round">
-                    <input type="checkbox" name="refresh" id="refresh" class="checkbox-round-btn">
-                    <i class="fas fa-sync-alt"></i>
-                </span>
-
+        <div class="nav-btn">
+            <i class="fas fa-bars"></i>
+        </div>
+        <nav class="nav-container micro">
+            <div class="navbar navbar-hidden">
+                <ul class="nav-list">
+                    <li>
+                        <h class="big-text">Menu</h2>
+                    </li>
+                    <li>Option1</li>
+                    <li>Option2</li>
+                    <li>Option3</li>
+                    <li>Option4</li>
+                </ul>
             </div>
+            <div class="nav-empty-space navbar-hidden"></div>
+        </nav>
+        <section class="map-container">
+            <div id="mapid" class="normal-map">
+            </div>
+            <div class="show-fullscreen">
+                <i class="fas fa-chevron-down"></i>
+            </div>
+        </section>
+        <section class="options-row">
+            <span class="checkbox-round">
+                <input type="checkbox" name="track-target" id="track-target" class="checkbox-round-btn">
+                <i class="fas fa-location-arrow"></i>
+            </span>
+            <span class="checkbox-round">
+                <input type="checkbox" name="show-all-vehicle" id="show-all-vehicle" class="checkbox-round-btn" checked>
+                <i class="fas fa-bus"></i>
+            </span>
+            <span class="checkbox-round">
+                <input type="checkbox" name="refresh" id="refresh" class="checkbox-round-btn">
+                <i class="fas fa-sync-alt"></i>
+            </span>
+        </section>
+        <article id="info-container">
+
             <div class="information-row">
                 <div class="general-info-card info-card">
                     <h2 id="vehicles-amount" class="big-text">Liczba pojazdów: <span></span></h2>
@@ -62,56 +82,14 @@
                     <select name="vehicles-select" id="vehicles-select"></select>
                 </div>
             </div>
-        </div>
+        </article>
         <div class="buttons-container">
-            <button class="general-info-btn switch-btn active-swtich-btn">Ogólne</button>
-            <button class="vehicle-info-btn switch-btn">Pojazd</button>
-            <button class="more-info-btn switch-btn">Więcej</button>
+            <button id="switch-1" class="general-info-btn switch-btn active-swtich-btn">Ogólne</button>
+            <button id="switch-2" class="vehicle-info-btn switch-btn">Pojazd</button>
+            <button id="switch-3" class="more-info-btn switch-btn">Więcej</button>
         </div>
     </div>
     <script src="js/main.js"></script>
-
-    <!-- 
-    <h1 id="app-title">ZTM APP</h1>
-    <h2 id="your-location">Cords: <span>testset</span></h2>
-    <div class="container">
-        <div class="data-section">
-            <h2>Where do you want to go?</h2>
-            <div class="form">
-                <form action="#" id="location-form">
-                    <label for="from">From: </label>
-                    <input name="from" type="text">
-                    <label>To: </label>
-                    <input name="to" type="text">
-                    <input type="submit" id="refresh" value="Refresh">
-                </form>
-            </div>
-            <label for="all-vehicles">Show all vehicles <input type="checkbox" id="all-vehicles" name="all-vehicles"
-                    checked></label>
-            <label for="track-target">Track target <input type="checkbox" id="track-target" name="track-target"></label>
-            Dostępne Linie:
-            <select name="line-select" id="line-select"></select>
-            Dostępne pojazdy:
-            <select name="vehicles-select" id="vehicles-select"></select>
-
-            <div id="update-time">Zaktualizowano: <span></span></div>
-            <div id="refresh-time">Odświeżenie za: <span></span> </div>
-            <div class="vehicle-info"></div>
-
-        </div>
-        <div class="map-details">
-            <div id="mapid"></div>
-            <p id="vehicles-amount">Liczba pojazdów: <span></span></p>
-            <p id="max-speed">Prędkość: <span class="speed"></span> pojzadu o kodzie: <span class="speedId"></span></p>
-            <p id="route">Trasa: <span></span></p>
-            <p id="gps-signal">Sygnał gps (0-3): <span></span></p>
-        </div>
-    </div>
-    <div style="font-size: .5rem; margin-top: 5rem">Icons made by <a href="https://www.flaticon.com/authors/freepik"
-            title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a>
-    </div> -->
-
-
 </body>
 
 </html>

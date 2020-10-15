@@ -19,16 +19,22 @@ export function createMap(startCoordinates = [54.49074313834612, 18.469270882244
     })
 
     const myMap = L.map('mapid', {
-        layers: [satelitteLayer, normalLayer]
+        layers: [satelitteLayer, normalLayer],
+        zoomControl: false
     }).setView(startCoordinates, startZoom);
 
     const baseMaps = {
         "Satelitte": satelitteLayer,
         "Normal": normalLayer,
-
     }
 
-    L.control.layers(baseMaps).addTo(myMap);
+    L.control.layers(baseMaps, undefined, {
+        position: 'bottomright',
+        autoZIndex: false,
+    }).addTo(myMap);
+    L.control.zoom({
+        position: 'bottomleft'
+    }).addTo(myMap);
 
     return myMap;
 }
@@ -65,7 +71,7 @@ export function getUserLocation(map, flyToCords = false, iconPNG = false) {
                     duration: .8
                 });
             }
-            myPostion.bindPopup(`Your location is: </br><b>x: ${cords[0].toFixed(2)}, </br> y: ${cords[1].toFixed(2)}</b><br> Accuracy: <b>${position.coords.accuracy} m</b>`).openPopup();
+            myPostion.bindPopup(`Your location is: </br><b>x: ${cords[0].toFixed(2)}, </br> y: ${cords[1].toFixed(2)}</b><br> Accuracy: <b>${position.coords.accuracy.toFixed(0)} m</b>`).openPopup();
             return myPostion;
         });
     } else {

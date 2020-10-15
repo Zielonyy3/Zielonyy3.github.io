@@ -5,6 +5,7 @@
     --round-btn-size: 45px;
     --round-btn-checked-color: rgb(47, 235, 94);
     --paragraph-color: #aaa;
+    --background-color: rgb(26, 26, 26);
 }
 
 * {
@@ -19,9 +20,9 @@ html {
 }
 
 body {
-    background-color: rgb(26, 26, 26);
+    background-color: var(--background-color);
     color: #eee;
-    overflow-y: hidden;
+    overflow: hidden;
 }
 
 #main-container {
@@ -31,8 +32,36 @@ body {
     height: 100vh;
 }
 
+.map-container {
+    position: relative;
+}
+
 #mapid {
+    transition: .3s height;
+}
+
+.normal-map {
     height: 60vh;
+}
+
+.fullscreen-map {
+    height: 100vh;
+}
+
+.show-fullscreen {
+    background-color: var(--background-color);
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    height: 25px;
+    width: 40%;
+    transform: translateX(-50%);
+    z-index: 9998;
+    border-radius: 20px 20px 0 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.3rem;
 }
 
 .leaflet-control-attribution {
@@ -42,28 +71,28 @@ body {
 #info-container {
     width: 100%;
     display: flex;
-    flex-flow: column nowrap;
-    align-items: stretch;
-    justify-content: flex-starts;
+    flex-flow: row nowrap;
+    align-items: flex-start;
+    justify-content: flex-start;
+    flex-grow: 1;
     height: 30vh;
-    padding: 1rem 1.22rem;
+    padding: 0 1.22rem;
 }
 
 .buttons-container {
     display: flex;
-    flex-basis: 30%;
     flex-flow: row nowrap;
     justify-content: space-around;
     align-items: center;
-    flex: 0 0 10%;
+    flex: 0 0 auto;
+    margin: .2em 0 1em;
 }
-
 
 .options-row {
     display: flex;
     flex-flow: row nowrap;
     justify-content: center;
-    margin: 0 0 1.5rem;
+    margin: 1rem 0 .5rem;
 }
 
 .information-row {
@@ -71,14 +100,99 @@ body {
     flex-flow: column nowrap;
     align-items: stretch;
     flex-basis: 30%;
-    flex-grow: 0;
+    flex-grow: 1;
+    overflow-y: scroll;
+}
+
+.nav-btn {
+    position: absolute;
+    top: 5px;
+    left: 7px;
+    height: 40px;
+    width: 40px;
+    z-index: 10000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #000;
+    font-size: 2rem;
+    transition: .3s color;
+}
+
+.nav-btn i {
+    /* --shadow-color: #fff; */
+    /* text-shadow: 1px 0px 2px var(--shadow-color), -1px 0px 2px var(--shadow-color), 0px 1px 2px var(--shadow-color), 0px -1px 2px var(--shadow-color); */
+    text-align: center;
+}
+
+.navbar-shown-btn {
+    color: #fff;
+}
+
+.nav-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    flex-flow: row nowrap;
+}
+
+.navbar {
+    position: relative;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    z-index: 9999;
+    background-color: var(--background-color);
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: flex-start;
+    padding: 2rem;
+    align-items: center;
+    transition: .3s transform, .15s .15s box-shadow;
+    box-shadow: 2px 0px 30px 20px rgba(0, 0, 0, 0.4);
+    flex: 1 0 80%;
+}
+
+.navbar-hidden {
+    transform: translateX(-100%);
+    box-shadow: none
+}
+
+.nav-empty-space {
+    width: 100%;
+    height: 100vh;
+    z-index: 10001;
+}
+
+.nav-list {
+    list-style: none;
+}
+
+.nav-list>li {
+    margin: 1em;
+    user-select: none;
+    cursor: pointer;
+    transition: .1s transform;
+}
+
+.nav-list>li:hover {
+    color: #fff;
+    transform: scale(1.2);
 }
 
 
-/* ---maintenance------ */
+/* ---maintenance------------- */
 
 .no-active {
     display: none;
+}
+
+.micro {
+    width: 0;
+    height: 0;
 }
 
 /* buttons  */
@@ -121,7 +235,7 @@ body {
 }
 
 .refresh-animation {
-    animation: refreshIcon 1s ease-in-out both normal;
+    animation: refreshIcon 1s ease-out none normal;
 }
 
 @keyframes refreshIcon {
@@ -130,7 +244,7 @@ body {
     }
 
     100% {
-        transform: rotate(720deg);
+        transform: rotate(1080deg);
     }
 }
 
@@ -143,6 +257,7 @@ body {
     text-transform: uppercase;
     color: #fff;
     box-shadow: 2px 2px 7px 0px rgba(0, 0, 0, 0.5);
+    user-select: none;
 }
 
 .active-swtich-btn {
