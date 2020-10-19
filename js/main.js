@@ -1,8 +1,9 @@
 const generalBtn = document.querySelector('.general-info-btn');
 const vehicleBtn = document.querySelector('.vehicle-info-btn');
 const moreBtn = document.querySelector('.more-info-btn');
-const cardsList = document.querySelectorAll('.info-card');
-const buttonsList = document.querySelectorAll('.switch-btn');
+
+
+
 const refreshBtn = document.querySelector('#refresh');
 const showFullScreen = document.querySelector('.show-fullscreen');
 const navBarBtn = document.querySelector('.nav-btn');
@@ -66,31 +67,35 @@ refreshBtn.addEventListener('click', e => {
         console.warn('Animacja w trakcie!');
 })
 
-generalBtn.addEventListener('click', e => {
-    e.preventDefault();
-    switchInfoCard(e.target, 'general-info')
-});
-vehicleBtn.addEventListener('click', e => {
-    e.preventDefault();
-    switchInfoCard(e.target, 'vehicle-info')
-});
-moreBtn.addEventListener('click', e => {
-    e.preventDefault();
-    switchInfoCard(e.target, 'more-info')
-});
-
-
-
-function switchInfoCard(button, cardName) {
-    cardsList.forEach(el => el.classList.add('no-active'))
+function switchCard() {
+    let activeCardNumber = document.querySelector('.active-swtich-btn').id;
+    activeCardNumber = activeCardNumber.substring(activeCardNumber.indexOf('-') + 1, activeCardNumber.length);
+    console.log(activeCardNumber);
+    const buttonsList = document.querySelectorAll('.switch-btn');
     buttonsList.forEach(el => el.classList.remove('active-swtich-btn'));
-    button.classList.add('active-swtich-btn');
-    const card = document.querySelector(`.${cardName}-card`);
-    card.classList.remove('no-active')
+    this.classList.add('active-swtich-btn');
+    let cardNumber = this.id;
+    cardNumber = cardNumber.substring(cardNumber.indexOf('-') + 1, cardNumber.length);
+
+
+    const cardsList = document.querySelectorAll('.info-card');
+    const cardsArr = Array.from(cardsList);
+    let tmp = []
+    cardsArr.forEach(el => {
+        const cardNo = el.id.substring(el.id.length - 1, el.id.length);
+        if (cardNo == cardNumber) {
+            tmp.unshift(el);
+        } else
+            tmp.push(el);
+        el.style.transform = `translateX(${-(cardNumber * 100 - 100)}%)`;
+    })
 }
+
+
 
 const informationContainer = document.querySelector('#info-container');
 const switchButtons = document.querySelectorAll('.switch-btn');
 switchButtons.forEach(btn => {
-    // btn.addEventListener('click', )
+    console.log(btn);
+    btn.addEventListener('click', switchCard)
 })

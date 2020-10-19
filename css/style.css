@@ -30,6 +30,7 @@ body {
     flex-flow: column nowrap;
     align-items: stretch;
     height: 100vh;
+    overflow: hidden;
 }
 
 .map-container {
@@ -69,14 +70,35 @@ body {
 }
 
 #info-container {
-    width: 100%;
+    width: 300%;
     display: flex;
     flex-flow: row nowrap;
     align-items: flex-start;
     justify-content: flex-start;
     flex-grow: 1;
     height: 30vh;
+    /* padding: 0 1.22rem; */
+}
+
+.info-card {
+    width: 100%;
     padding: 0 1.22rem;
+    transform: scale(1) translateX(0);
+    transition: .3s transform;
+}
+
+.move-card-left {
+    transform: translateX(-100%);
+}
+
+.move-card-right {
+    transform: translateX(100%);
+}
+
+.card-hidden {
+    position: relative;
+    transform: scale(0);
+    display: none !important;
 }
 
 .buttons-container {

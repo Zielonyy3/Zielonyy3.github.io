@@ -63,25 +63,25 @@
         </section>
         <article id="info-container">
 
-            <div class="information-row">
-                <div class="general-info-card info-card">
-                    <h2 id="vehicles-amount" class="big-text">Liczba pojazdów: <span></span></h2>
-                    <p id="update-time" class="info-text">Zaktualizowano: <span></span></p>
-                    <p id="refresh-time" class="info-text">Odświeżenie za: <span></span></p>
-                </div>
-                <div class="vehicle-info-card no-active info-card">
-                    <h2 id="tracked-code" class="big-text">Pojazd o kodzie: <span></span></h2>
-                    <p id="tracked-speed" class="info-text">Prędkość: <span></span></p>
-                    <p id="tracked-route" class="info-text">Trasa: <span></span></p>
-                    <p id="gps-signal" class="info-text">Sygnał GPS: <span></span></p>
-                </div>
-                <div class="more-info-card no-active info-card">
-                    <p class="info-text">Dostępne Linie: <span></span></p>
-                    <select name="line-select" id="line-select"></select></br>
-                    <p class="info-text">Dostępne pojazdy: <span></span></p>
-                    <select name="vehicles-select" id="vehicles-select"></select>
-                </div>
+            <!-- <div class="information-row"> -->
+            <div id="info-card-1" class="general-info-card info-card" data-index="1">
+                <h2 id="vehicles-amount" class="big-text">Liczba pojazdów: <span></span></h2>
+                <p id="update-time" class="info-text">Zaktualizowano: <span></span></p>
+                <p id="refresh-time" class="info-text">Odświeżenie za: <span></span></p>
             </div>
+            <div id="info-card-2" class="vehicle-info-card  info-card" data-index="2">
+                <h2 id="tracked-code" class="big-text">Pojazd o kodzie: <span></span></h2>
+                <p id="tracked-speed" class="info-text">Prędkość: <span></span></p>
+                <p id="tracked-route" class="info-text">Trasa: <span></span></p>
+                <p id="gps-signal" class="info-text">Sygnał GPS: <span></span></p>
+            </div>
+            <div id="info-card-3" class="more-info-card  info-card" data-index="3">
+                <p class="info-text">Dostępne Linie: <span></span></p>
+                <select name="line-select" id="line-select"></select></br>
+                <p class="info-text">Dostępne pojazdy: <span></span></p>
+                <select name="vehicles-select" id="vehicles-select"></select>
+            </div>
+            <!-- </div> -->
         </article>
         <div class="buttons-container">
             <button id="switch-1" class="general-info-btn switch-btn active-swtich-btn">Ogólne</button>
