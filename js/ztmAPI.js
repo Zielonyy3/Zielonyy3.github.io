@@ -4,13 +4,14 @@ const checkForError = response => {
 };
 
 export function getVehicleList(vehiclesOutput = null) {
-    let today = new Date();
-    let time = `${today.getHours()}:${today.getMinutes()}:${today.getSeconds()}:${today.getMilliseconds()}`;
+
     // console.log(`Downloading vehicle list..%c${time}`, "color: yellow");
     return fetch('https://ckan2.multimediagdansk.pl/gpsPositions')
         .then(checkForError)
         .then(response => {
-            console.log('%cVehicle list downloaded!', "color: yellow");
+            let today = new Date();
+            let time = `${today.getHours()}:${today.getMinutes()}:${today.getSeconds()}:${today.getMilliseconds()}`;
+            console.log(`Vehicle list downloaded! %c${time}`, "color: yellow");
 
             return response;
         })
