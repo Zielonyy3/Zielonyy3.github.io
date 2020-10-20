@@ -39,7 +39,7 @@
                             <p class="option-name">Aktualizuj swoją lokalizacje</p>
                             <label for="update-user-location" class="switch-container">
                                 <input type="checkbox" class="switch-checkbox-input" name="update-user-location"
-                                    id="update-user-location">
+                                    id="update-user-location" checked>
                                 <span class="switch-slider"></span>
                             </label>
 
@@ -75,8 +75,13 @@
             <div class="show-fullscreen">
                 <i class="fas fa-chevron-down"></i>
             </div>
+            <div class="loading-anim-div no-active"></div>
         </section>
         <section class="options-row">
+            <span class="checkbox-round">
+                <input type="checkbox" name="track-user" id="track-user-position" class="checkbox-round-btn">
+                <i class="fas fa-male"></i>
+            </span>
             <span class="checkbox-round">
                 <input type="checkbox" name="track-target" id="track-target" class="checkbox-round-btn">
                 <i class="fas fa-location-arrow"></i>

@@ -20,7 +20,6 @@ class NavBar {
         duration = duration.substring(0, duration.indexOf('s'));
 
         if (this.navBarElem.classList.contains('navbar-hidden') && this.navContainer.classList.contains('micro')) {
-            console.log(this.menuElements.sectionTitles);
             this.menuElements.menuHeader.classList.add('active-header-text');
             this.menuElements.switchContainers.forEach(sw => sw.classList.remove('switch-container-not-active'));
             this.menuElements.sectionTitles.forEach(sw => sw.classList.add('active-section-menu-title'));
@@ -102,9 +101,28 @@ class FullScreen {
     }
 }
 
+class OneOptionSelect {
+    constructor(option1, option2) {
+        this.buttons = {
+            option1: option1,
+            option2: option2,
+        }
+        this.buttons.option1.addEventListener('click', e => this.changeOption.call(this, e.target))
+        this.buttons.option2.addEventListener('click', e => this.changeOption.call(this, e.target))
+    }
+
+    changeOption(clicked) {
+        for (const key in this.buttons) {
+            if (this.buttons[key] != clicked)
+                this.buttons[key].checked = false;
+        }
+    }
+}
+
 const navBarObj = new NavBar(document.querySelector('.nav-container'), document.querySelector('.nav-btn'));
 const infoMenu = new InformationMenu(document.querySelector('#info-container'), document.querySelector('.buttons-container'));
 const fullScreenObj = new FullScreen(document.querySelector('.show-fullscreen'), document.querySelector('#mapid'));
+const oneOptionObj = new OneOptionSelect(document.querySelector('#track-user-position'), document.querySelector('#track-target'));
 
 const refreshBtn = document.querySelector('#refresh');
 refreshBtn.addEventListener('click', e => {

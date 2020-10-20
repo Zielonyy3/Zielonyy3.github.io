@@ -3,8 +3,8 @@
 :root {
     --main-color: #5f88da;
     --round-btn-size: 45px;
-    --round-btn-checked-color: rgb(47, 235, 94);
-    --paragraph-color: #aaa;
+    --round-btn-checked-color: #2feb5e;
+    --paragraph-color: #aaaaaa;
     --section-text-color: rgb(221, 221, 221);
     --background-color: rgb(26, 26, 26);
 }
@@ -76,7 +76,7 @@ body {
     flex-flow: row nowrap;
     align-items: flex-start;
     justify-content: flex-start;
-    flex-grow: 1;
+    flex: 0 1 auto;
     height: 30vh;
     /* padding: 0 1.22rem; */
 }
@@ -92,7 +92,6 @@ body {
     display: flex;
     flex-flow: row nowrap;
     justify-content: space-evenly;
-    min-height: 80%;
     padding-top: 1em;
     text-align: center;
 }
@@ -153,8 +152,6 @@ body {
 }
 
 .nav-btn i {
-    /* --shadow-color: #fff; */
-    /* text-shadow: 1px 0px 2px var(--shadow-color), -1px 0px 2px var(--shadow-color), 0px 1px 2px var(--shadow-color), 0px -1px 2px var(--shadow-color); */
     text-align: center;
 }
 
@@ -265,6 +262,22 @@ body {
     border-width: 0 1px 0;
 }
 
+.loading-anim-div {
+    position: absolute;
+    top: 0px;
+    left: 50%;
+    width: 100px;
+    height: 100px;
+    transform: translate(-50%, -10%);
+    z-index: 9998;
+    background-image: url(../img/loading-anim.gif);
+    background-repeat: no-repeat;
+    background-position: top;
+    background-origin: border-box;
+    background-size: 60px;
+}
+
+
 /* ---maintenance------------- */
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
@@ -344,6 +357,10 @@ a {
 }
 
 /* ----------------------------------------switches --------------*/
+button:focus {
+    outline: 0;
+}
+
 .switch-btn {
     width: 90px;
     padding: .8em 1.2em;
@@ -458,6 +475,7 @@ a {
     top: 0%;
 }
 
+/* podkreślenie do nagłówka w menu - na razie wyłączone */
 /* .header-text::after {
     text-align: center;
     display: block;

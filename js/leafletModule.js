@@ -48,35 +48,41 @@ export function checkMouseClickCoordinates(e, map) {
     console.log(point);
 }
 
-export function getUserLocation(map, flyToCords = false, iconPNG = false) {
-    if (navigator.geolocation) {
-        const options = {
-            enableHighAccuracy: true
-        }
-        navigator.geolocation.getCurrentPosition(position => {
-            const cords = [position.coords.latitude, position.coords.longitude]
-            let myPostion = L.marker(cords, {
-                color: 'red',
-                fillColor: '#f03',
-                fillOpacity: 0.5,
-                radius: 500
-            }, options).addTo(map);
-
-            if (iconPNG)
-                myPostion.setIcon(iconPNG);
-
-            if (flyToCords) {
-                map.flyTo(cords, map.getZoom(), {
-                    animate: true,
-                    duration: .8
-                });
+export function getUserLocation(map, move = false, iconPNG = false, activeLocation = true) {
+    return new Promise((resolve, reject) => {
+        if (navigator.geolocation && activeLocation) {
+            const options = {
+                enableHighAccuracy: true
             }
-            myPostion.bindPopup(`Your location is: </br><b>x: ${cords[0].toFixed(2)}, </br> y: ${cords[1].toFixed(2)}</b><br> Accuracy: <b>${position.coords.accuracy.toFixed(0)} m</b>`).openPopup();
-            return myPostion;
-        });
-    } else {
-        alert(`These browser doesn't support geolocation`)
-    }
+            navigator.geolocation.getCurrentPosition(position => {
+                const cords = [position.coords.latitude, position.coords.longitude]
+                if (move) {
+                    resolve(cords)
+                } else {
+                    let myPostion = L.marker(cords, {
+                        color: 'red',
+                        fillColor: '#f03',
+                        fillOpacity: 0.5,
+                        radius: 500
+                    }, options).addTo(map);
+
+                    if (iconPNG)
+                        myPostion.setIcon(iconPNG);
+                    myPostion.bindPopup(`Your location is: </br><b>x: ${cords[0].toFixed(2)}, </br> y: ${cords[1].toFixed(2)}</b><br> Accuracy: <b>${position.coords.accuracy.toFixed(0)} m</b>`).openPopup();
+                    resolve(myPostion);
+                }
+            });
+        } else {
+            reject(`These browser doesn't support geolocation or user blocked it`);
+        }
+    })
+}
+
+export function flyToCords(map, cords) {
+    map.flyTo(cords, map.getZoom(), {
+        animate: true,
+        duration: .8
+    });
 }
 
 export function createPin(mapObj, cords, iconPNG = false) {
@@ -120,15 +126,4 @@ export function createPopup(vehicleObj, paragraphText, btn1Text, mapObj, functio
 
 
     return popUp;
-}
-
-export function setNewMarkerLocation(vehicleObj, cords, mapObj = false) {
-    let newLatLng = new L.LatLng(cords[0], cords[1]);
-    vehicleObj.marker.setLatLng(newLatLng);
-    if (mapObj) {
-        mapObj.map.flyTo(cords, mapObj.map.getZoom(), {
-            animate: true,
-            duration: .45
-        });
-    }
 }
