@@ -24,15 +24,48 @@
         </div>
         <nav class="nav-container micro">
             <div class="navbar navbar-hidden">
-                <ul class="nav-list">
-                    <li>
-                        <h class="big-text">Menu</h2>
-                    </li>
-                    <li>Option1</li>
-                    <li>Option2</li>
-                    <li>Option3</li>
-                    <li>Option4</li>
-                </ul>
+                <h1 class="header-text"></h1>
+                <div class="navbar-section ">
+                    <h2 class="section-menu-title">Szukaj pojazdu</h2>
+                    <div class="find-vehicle-section">
+                        <Label for="find-vehicle">Kod: </Label><input type="number" class="navbar-input"
+                            name="find-vehicle" id="find-vehicle" placeholder="Podaj kod pojazdu">
+                    </div>
+                </div>
+                <div class="navbar-section">
+                    <h2 class="section-menu-title">Ustawienia</h2>
+                    <ul class="nav-list">
+                        <li>
+                            <p class="option-name">Aktualizuj swoją lokalizacje</p>
+                            <label for="update-user-location" class="switch-container">
+                                <input type="checkbox" class="switch-checkbox-input" name="update-user-location"
+                                    id="update-user-location">
+                                <span class="switch-slider"></span>
+                            </label>
+
+                        </li>
+                        <li>
+                            <p class="option-name">Rysuj trasę śledzonego pojazdu</p>
+                            <label for="draw-vehicle-route" class="switch-container">
+                                <input type="checkbox" class="switch-checkbox-input" name="draw-vehicle-route"
+                                    id="draw-vehicle-route">
+                                <span class="switch-slider"></span>
+                            </label>
+
+                        </li>
+                        <li>
+                            <p class="option-name">Pokazuj przystanki</p>
+                            <label for="show-stops-on-map" class="switch-container">
+                                <input type="checkbox" class="switch-checkbox-input" name="show-stops-on-map"
+                                    id="show-stops-on-map">
+                                <span class="switch-slider"></span>
+
+                        </li>
+                    </ul>
+                </div>
+                <div class="navbar-section menu-contact">
+                    <span>Zielonyy3</span> <span><a href="#">GitHub</a></span> <span><a href="#">Icons</a></span>
+                </div>
             </div>
             <div class="nav-empty-space navbar-hidden"></div>
         </nav>
@@ -58,8 +91,6 @@
             </span>
         </section>
         <article id="info-container">
-
-            <!-- <div class="information-row"> -->
             <div id="info-card-1" class="general-info-card info-card" data-index="1">
                 <h2 id="vehicles-amount" class="big-text">Liczba pojazdów: <span></span></h2>
                 <p id="update-time" class="info-text">Zaktualizowano: <span></span></p>
@@ -72,12 +103,17 @@
                 <p id="gps-signal" class="info-text">Sygnał GPS: <span></span></p>
             </div>
             <div id="info-card-3" class="more-info-card  info-card" data-index="3">
-                <p class="info-text">Dostępne Linie: <span></span></p>
-                <select name="line-select" id="line-select"></select></br>
-                <p class="info-text">Dostępne pojazdy: <span></span></p>
-                <select name="vehicles-select" id="vehicles-select"></select>
+                <div class="more-info-card-row">
+                    <p class="info-text">Dostępne Linie: <span></span></p>
+                    <select name="line-select" id="line-select" class="option-select">
+                    </select></br>
+                </div>
+                <div class="more-info-card-row">
+
+                    <p class="info-text">Dostępne pojazdy: <span></span></p>
+                    <select name="vehicles-select" id="vehicles-select" class="option-select"></select>
+                </div>
             </div>
-            <!-- </div> -->
         </article>
         <div class="buttons-container">
             <button id="switch-1" class="general-info-btn switch-btn active-swtich-btn">Ogólne</button>
@@ -85,7 +121,7 @@
             <button id="switch-3" class="more-info-btn switch-btn">Więcej</button>
         </div>
     </div>
-    <script src="js/main.js" type="module"></script>
+    <script src="js/main.js"></script>
 </body>
 
 </html>

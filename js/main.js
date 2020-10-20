@@ -7,6 +7,12 @@ class NavBar {
 
         this.navBarHamburgerBtn.addEventListener('click', this.toggleNavMenu.bind(this, ));
         this.navEmptySpace.addEventListener('click', this.toggleNavMenu.bind(this, ));
+
+        this.menuElements = {
+            menuHeader: this.navBarElem.querySelector('.header-text'),
+            sectionTitles: this.navBarElem.querySelectorAll('.section-menu-title'),
+            switchContainers: this.navBarElem.querySelectorAll('.switch-container'),
+        }
     }
     toggleNavMenu() {
         const compNavBar = window.getComputedStyle(this.navBarElem);
@@ -14,11 +20,18 @@ class NavBar {
         duration = duration.substring(0, duration.indexOf('s'));
 
         if (this.navBarElem.classList.contains('navbar-hidden') && this.navContainer.classList.contains('micro')) {
+            console.log(this.menuElements.sectionTitles);
+            this.menuElements.menuHeader.classList.add('active-header-text');
+            this.menuElements.switchContainers.forEach(sw => sw.classList.remove('switch-container-not-active'));
+            this.menuElements.sectionTitles.forEach(sw => sw.classList.add('active-section-menu-title'));
             this.navContainer.classList.remove('micro')
             this.navBarHamburgerBtn.classList.add('navbar-shown-btn');
             this.navBarElem.classList.remove('navbar-hidden');
             this.navEmptySpace.classList.remove('navbar-hidden');
         } else if (!this.navBarElem.classList.contains('navbar-hidden')) {
+            this.menuElements.menuHeader.classList.remove('active-header-text');
+            this.menuElements.switchContainers.forEach(sw => sw.classList.add('switch-container-not-active'));
+            this.menuElements.sectionTitles.forEach(sw => sw.classList.remove('active-section-menu-title'));
             this.navBarHamburgerBtn.classList.remove('navbar-shown-btn');
             this.navBarElem.classList.add('navbar-hidden');
             this.navEmptySpace.classList.add('navbar-hidden');

@@ -5,6 +5,7 @@
     --round-btn-size: 45px;
     --round-btn-checked-color: rgb(47, 235, 94);
     --paragraph-color: #aaa;
+    --section-text-color: rgb(221, 221, 221);
     --background-color: rgb(26, 26, 26);
 }
 
@@ -87,6 +88,15 @@ body {
     transition: .3s transform;
 }
 
+.more-info-card {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-evenly;
+    min-height: 80%;
+    padding-top: 1em;
+    text-align: center;
+}
+
 .move-card-left {
     transform: translateX(-100%);
 }
@@ -139,6 +149,7 @@ body {
     color: #000;
     font-size: 2rem;
     transition: .3s color;
+    cursor: pointer;
 }
 
 .nav-btn i {
@@ -171,8 +182,8 @@ body {
     display: flex;
     flex-flow: column nowrap;
     justify-content: flex-start;
-    padding: 2rem;
-    align-items: center;
+    padding: 1.5rem 1rem;
+    align-items: stretch;
     transition: .3s transform, .15s .15s box-shadow;
     box-shadow: 2px 0px 30px 20px rgba(0, 0, 0, 0.4);
     flex: 1 0 80%;
@@ -194,19 +205,76 @@ body {
 }
 
 .nav-list>li {
-    margin: 1em;
+    margin: 1em 0;
     user-select: none;
-    cursor: pointer;
     transition: .1s transform;
 }
 
-.nav-list>li:hover {
+.navbar-section {
+    margin: 1.8em 0;
+}
+
+.navbar-section label {
+    color: var(--paragraph-color);
+}
+
+.find-vehicle-section {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+    align-items: baseline;
+}
+
+.navbar-input {
+    width: 175px;
+    margin: 0 2em 0;
+    padding: .4em .8em .4em .2em;
+    background-color: var(--background-color);
+    border: 1px solid var(--background-color);
+    border-bottom: 1px solid rgb(138, 138, 138);
     color: #fff;
-    transform: scale(1.2);
+    transition: .3s all;
+    font-size: 1em;
+}
+
+.navbar-input:hover {
+    color: #000;
+    background-color: rgb(190, 190, 190);
+    border-bottom: 1px solid var(--main-color);
 }
 
 
+.menu-contact {
+    flex: 1 1 100%;
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: flex-end;
+    justify-content: center;
+    padding: 0;
+    margin: 0;
+}
+
+.menu-contact span {
+    flex: 0 1 32%;
+    padding: 0 1em;
+    border: 1px dotted var(--paragraph-color);
+    border-width: 0;
+}
+
+.menu-contact span:nth-child(2) {
+    border-width: 0 1px 0;
+}
+
 /* ---maintenance------------- */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type=number] {
+    -moz-appearance: textfield;
+}
 
 .no-active {
     display: none;
@@ -215,6 +283,11 @@ body {
 .micro {
     width: 0;
     height: 0;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
 }
 
 /* buttons  */
@@ -270,6 +343,7 @@ body {
     }
 }
 
+/* ----------------------------------------switches --------------*/
 .switch-btn {
     width: 90px;
     padding: .8em 1.2em;
@@ -286,7 +360,119 @@ body {
     background: var(--main-color);
 }
 
+.switch-container {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 28px;
+    margin: .6em 0 0;
+    transform: scale(1);
+    transition: .1s .2s transform;
+}
+
+.switch-container-not-active {
+    transform: scale(0);
+}
+
+.switch-checkbox-input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.switch-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: var(--paragraph-color);
+    transition: .15s;
+    border-radius: 20px;
+}
+
+.switch-slider:before {
+    position: absolute;
+    content: '';
+    height: 24px;
+    width: 24px;
+    top: 2px;
+    left: 2px;
+    background-color: #fff;
+    transition: .15s;
+    border-radius: 50%;
+}
+
+.switch-checkbox-input:checked+.switch-slider {
+    background-color: var(--main-color);
+}
+
+.switch-checkbox-input:checked+.switch-slider:before {
+    transform: translateX(32px);
+}
+
+/* ---------------select option----------- */
+.option-select {
+    width: 90px;
+    padding: .6em .8em;
+    margin: .7em 0;
+    background-color: var(--paragraph-color);
+    color: #000;
+    box-shadow: 0 15px 30px -10px rgba(0, 0, 0, 0.1);
+    background-color: rgb(117, 117, 117);
+    background: rgb(223, 223, 223) url(../img/select_arrow.svg) 0 0 no-repeat;
+    background-size: 20px;
+    background-origin: padding-box;
+    background-position: 90%;
+    border: 1px solid rgb(223, 223, 223);
+    -webkit-appearance: none;
+}
+
+.option-select option {
+    background-color: rgb(223, 223, 223);
+    border: 1px solid gb(223, 223, 223);
+}
+
 /* text */
+.header-text {
+    align-self: center;
+    text-align: center;
+    color: var(--main-color);
+    font-size: 2em;
+    margin: 0 0 .4em;
+    width: 80%;
+    font-weight: bold;
+}
+
+.header-text::before {
+    display: block;
+    content: 'ZTM APP';
+    text-align: center;
+    position: relative;
+    top: -200%;
+    transition: .2s .1s top;
+}
+
+.active-header-text::before {
+    top: 0%;
+}
+
+/* .header-text::after {
+    text-align: center;
+    display: block;
+    content: '';
+    margin: .15em auto;
+    width: 0%;
+    border: 1px solid rgba(141, 141, 141, 0);
+    transition: .2s .3s width, .2s .2s border-color;
+}
+
+.active-header-text::after {
+    border-color: rgba(141, 141, 141, 0.775);
+    width: 100%;
+} */
+
 .big-text {
     font-size: 1.4em;
     margin: .4em 0;
@@ -295,4 +481,25 @@ body {
 .info-text {
     color: var(--paragraph-color);
     margin: .15em 0;
+}
+
+.section-menu-title {
+    width: 100%;
+    font-size: 1.4rem;
+    font-weight: normal;
+    color: var(--section-text-color);
+}
+
+.section-menu-title::after {
+    display: block;
+    content: '';
+    margin: .15em 0 1em;
+    border: 1px solid rgba(73, 73, 73, 0);
+    width: 0;
+    transition: .2s .2s all;
+}
+
+.active-section-menu-title::after {
+    border: 1px solid rgba(73, 73, 73, 0.775);
+    width: 100%;
 }
