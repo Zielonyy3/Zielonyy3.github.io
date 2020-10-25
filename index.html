@@ -28,8 +28,12 @@
                 <div class="navbar-section ">
                     <h2 class="section-menu-title">Szukaj pojazdu</h2>
                     <div class="find-vehicle-section">
-                        <Label for="find-vehicle">Kod: </Label><input type="number" class="navbar-input"
-                            name="find-vehicle" id="find-vehicle" placeholder="Podaj kod pojazdu">
+                        <form action="#" id="find-vehicle-form">
+                            <Label for="find-vehicle">Kod: </Label><input type="number" class="navbar-input"
+                                name="find-vehicle" id="find-vehicle" placeholder="Podaj kod pojazdu">
+                            <input type="submit" value="Szukaj" class="switch-container-not-active"
+                                id="find-vehicle-submit">
+                        </form>
                     </div>
                 </div>
                 <div class="navbar-section">
@@ -48,7 +52,7 @@
                             <p class="option-name">Rysuj trasę śledzonego pojazdu</p>
                             <label for="draw-vehicle-route" class="switch-container">
                                 <input type="checkbox" class="switch-checkbox-input" name="draw-vehicle-route"
-                                    id="draw-vehicle-route">
+                                    id="draw-vehicle-route" checked>
                                 <span class="switch-slider"></span>
                             </label>
 
@@ -76,6 +80,13 @@
                 <i class="fas fa-chevron-down"></i>
             </div>
             <div class="loading-anim-div no-active"></div>
+            <div class="show-info-fullscreen">
+                <div class="vehicle-icon"></div>
+                <div class="vehicle-info">
+                    <span id='vehicle-code-info'>8518</span>
+                    <span id='vehicle-speed-info'>65 km/h</span>
+                </div>
+            </div>
         </section>
         <section class="options-row">
             <span class="checkbox-round">

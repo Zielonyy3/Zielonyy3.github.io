@@ -2,16 +2,30 @@ class NavBar {
     constructor(navContainerElement, navBarHamburgerButton) {
         this.navContainer = navContainerElement
         this.navBarElem = this.navContainer.querySelector('.navbar');
+        this.formForFindVehicleByCode = this.navContainer.querySelector('#find-vehicle-form');
         this.navBarHamburgerBtn = navBarHamburgerButton;
         this.navEmptySpace = document.querySelector('.nav-empty-space');
 
-        this.navBarHamburgerBtn.addEventListener('click', this.toggleNavMenu.bind(this, ));
-        this.navEmptySpace.addEventListener('click', this.toggleNavMenu.bind(this, ));
+
+        this.navBarHamburgerBtn.addEventListener('click', this.toggleNavMenu.bind(this));
+        this.navEmptySpace.addEventListener('click', this.toggleNavMenu.bind(this));
+        this.formForFindVehicleByCode.addEventListener('submit', () => {
+            const input = this.formForFindVehicleByCode.querySelector('#find-vehicle');
+            const inputValue = this.formForFindVehicleByCode.querySelector('#find-vehicle').value;
+            if (inputValue) {
+                this.toggleNavMenu();
+            } else {
+                input.classList.add('navbar-input-hover');
+                if (input.classList.contains('navbar-input-hover'))
+                    setTimeout(() => input.classList.remove('navbar-input-hover'), 1000);
+            }
+        })
 
         this.menuElements = {
             menuHeader: this.navBarElem.querySelector('.header-text'),
             sectionTitles: this.navBarElem.querySelectorAll('.section-menu-title'),
             switchContainers: this.navBarElem.querySelectorAll('.switch-container'),
+            findButton: this.navBarElem.querySelector('#find-vehicle-submit'),
         }
     }
     toggleNavMenu() {
@@ -23,6 +37,7 @@ class NavBar {
             this.menuElements.menuHeader.classList.add('active-header-text');
             this.menuElements.switchContainers.forEach(sw => sw.classList.remove('switch-container-not-active'));
             this.menuElements.sectionTitles.forEach(sw => sw.classList.add('active-section-menu-title'));
+            this.menuElements.findButton.classList.remove('switch-container-not-active');
             this.navContainer.classList.remove('micro')
             this.navBarHamburgerBtn.classList.add('navbar-shown-btn');
             this.navBarElem.classList.remove('navbar-hidden');
@@ -31,6 +46,7 @@ class NavBar {
             this.menuElements.menuHeader.classList.remove('active-header-text');
             this.menuElements.switchContainers.forEach(sw => sw.classList.add('switch-container-not-active'));
             this.menuElements.sectionTitles.forEach(sw => sw.classList.remove('active-section-menu-title'));
+            this.menuElements.findButton.classList.add('switch-container-not-active');
             this.navBarHamburgerBtn.classList.remove('navbar-shown-btn');
             this.navBarElem.classList.add('navbar-hidden');
             this.navEmptySpace.classList.add('navbar-hidden');
@@ -78,9 +94,10 @@ class InformationMenu {
 }
 
 class FullScreen {
-    constructor(fullScreenButton, fullScreenMap) {
+    constructor(fullScreenButton, fullScreenMap, fullscreenInfoDiv) {
         this.fullScreenBtn = fullScreenButton;
         this.fullScreenMap = fullScreenMap;
+        this.fullscreenInfoDiv = fullscreenInfoDiv;
 
         this.fullScreenBtn.addEventListener('click', () => this.showFullScreenMap())
     }
@@ -91,10 +108,15 @@ class FullScreen {
             this.fullScreenBtn.children[0].classList.remove('fa-chevron-down');
             this.fullScreenBtn.children[0].classList.add('fa-chevron-up');
             this.fullScreenMap.classList.add('fullscreen-map');
+            this.fullscreenInfoDiv.classList.remove('hide-transition-class');
+            this.fullscreenInfoDiv.classList.add('info-fullscreen-active');
         } else {
             this.fullScreenBtn.children[0].classList.remove('fa-chevron-up');
             this.fullScreenBtn.children[0].classList.add('fa-chevron-down');
             this.fullScreenMap.classList.remove('fullscreen-map');
+            this.fullscreenInfoDiv.classList.add('hide-transition-class');
+            this.fullscreenInfoDiv.classList.remove('info-fullscreen-active');
+
         }
         setTimeout(() => this.fullScreenBtn.addEventListener('click', () => this.showFullScreenMap), 0.2 * 1000)
 
@@ -121,7 +143,7 @@ class OneOptionSelect {
 
 const navBarObj = new NavBar(document.querySelector('.nav-container'), document.querySelector('.nav-btn'));
 const infoMenu = new InformationMenu(document.querySelector('#info-container'), document.querySelector('.buttons-container'));
-const fullScreenObj = new FullScreen(document.querySelector('.show-fullscreen'), document.querySelector('#mapid'));
+const fullScreenObj = new FullScreen(document.querySelector('.show-fullscreen'), document.querySelector('#mapid'), document.querySelector('.show-info-fullscreen'));
 const oneOptionObj = new OneOptionSelect(document.querySelector('#track-user-position'), document.querySelector('#track-target'));
 
 const refreshBtn = document.querySelector('#refresh');

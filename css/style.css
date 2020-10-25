@@ -66,6 +66,56 @@ body {
     font-size: 1.3rem;
 }
 
+.show-info-fullscreen {
+    position: absolute;
+    bottom: 1rem;
+    left: 50%;
+    z-index: 9998;
+    width: 250px;
+    height: 65px;
+    border-radius: 30px;
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: flex-start;
+    align-items: center;
+    box-shadow: 3px 3px 15px 0px rgba(0, 0, 0, 0.4);
+    background-color: rgb(230, 230, 230);
+    color: #000;
+    padding: .5em;
+    transform: translate(-50%, -50%) scale(0);
+    transition: .2s .3s all;
+}
+
+.hide-transition-class {
+    transition: .2s .1s all;
+}
+
+.info-fullscreen-active {
+    transform: translate(-50%, -50%) scale(.8);
+}
+
+.vehicle-icon {
+    width: 50px;
+    height: 50px;
+    background-color: blue;
+    background: url(../img/bus_128.png);
+    background-position: center;
+    background-clip: content-box;
+    background-repeat: no-repeat;
+    background-size: 100%;
+    border-radius: 50%;
+}
+
+.vehicle-icon-not-traceked {
+    background-color: orange;
+}
+
+#vehicle-code-info {
+    font-size: 1.5em;
+    margin: 0 .4em 0 1.5em;
+    font-weight: bold;
+}
+
 .leaflet-control-attribution {
     font-size: .4rem !important;
 }
@@ -240,6 +290,12 @@ body {
     border-bottom: 1px solid var(--main-color);
 }
 
+.navbar-input-hover {
+    color: #000;
+    background-color: rgb(190, 190, 190);
+    border-bottom: 1px solid var(--main-color);
+}
+
 
 .menu-contact {
     flex: 1 1 100%;
@@ -357,6 +413,15 @@ a {
 }
 
 /* ----------------------------------------switches --------------*/
+#find-vehicle-submit {
+    padding: .5em 1.2em;
+    transition: .1s .2s all;
+    text-transform: uppercase;
+    color: #fff;
+    background-color: var(--main-color);
+    border: 1px solid var(--main-color);
+}
+
 button:focus {
     outline: 0;
 }
@@ -428,6 +493,7 @@ button:focus {
 .switch-checkbox-input:checked+.switch-slider:before {
     transform: translateX(32px);
 }
+
 
 /* ---------------select option----------- */
 .option-select {

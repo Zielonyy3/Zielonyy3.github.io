@@ -1,7 +1,7 @@
 import {
     createMap,
     getUserLocation,
-    checkMouseClickCoordinates,
+    createTrackerLine,
     createPin,
     createPopup,
     flyToCords
@@ -27,15 +27,12 @@ export class ApiData {
 }
 
 export class MapObj {
-    constructor(refreshBtn, trackTargetBtn, showAllvehiclesBtn, trackUserLocationBtn, canTrackUserBtn, lineSelectInpt, vehicleSelectInpt, vehiclesAmountSpn, updateTimeSpn, trackedVehicleSpeedSpn, trackedVehicleCodeSpn, trackedVehicleRouteSpn, gpsSignalSpn, timeToRefreshSpn, loadingAnimDiv, apiData) {
+    constructor(refreshBtn, trackTargetBtn, showAllvehiclesBtn, trackUserLocationBtn, canTrackUserBtn, drawTrackedVehicleRouteBtn, lineSelectInpt, vehicleSelectInpt, vehicleCodeForm, vehiclesAmountSpn, updateTimeSpn, trackedVehicleSpeedSpn, trackedVehicleCodeSpn, trackedVehicleRouteSpn, gpsSignalSpn, timeToRefreshSpn, loadingAnimDiv, trackedVehicleCodeSmallSpn, trackedVehicleSpeedSmallSpn, apiData) {
         this.map = createMap(undefined, 12);
+        this.routeTracker = createTrackerLine(this.map);
         this.trackedLine = -1;
         this.trackedVehicle = {};
         this.allVehicles = [];
-        this.canTrackUser = true
-        this.showAllVehicles = false;
-        this.trackTargetOnMap = false;
-        this.trackUserLocationOnMap = false;
         this.loadingAnimDiv = loadingAnimDiv;
         this.markerIcons = {
             busIcon: L.icon({
@@ -63,10 +60,12 @@ export class MapObj {
             showAllvehiclesBtn: showAllvehiclesBtn,
             trackUserLocationBtn: trackUserLocationBtn,
             canTrackUserBtn: canTrackUserBtn,
+            drawTrackedVehicleRouteBtn: drawTrackedVehicleRouteBtn,
         };
         this.selectInput = {
             lineSelect: lineSelectInpt,
             vehicleSelect: vehicleSelectInpt,
+            findVehicleByCode: vehicleCodeForm,
         };
         this.inputToFill = {
             vehiclesAmount: vehiclesAmountSpn,
@@ -76,7 +75,15 @@ export class MapObj {
             trackedVehicleRoute: trackedVehicleRouteSpn,
             gpsSignal: gpsSignalSpn,
             timeToRefresh: timeToRefreshSpn,
+            trackedVehicleCodeSmall: trackedVehicleCodeSmallSpn,
+            trackedVehicleSpeedSmall: trackedVehicleSpeedSmallSpn,
         }
+        this.showAllVehicles = this.buttons.showAllvehiclesBtn.checked;
+        this.canTrackUser = this.buttons.canTrackUserBtn.checked;
+        this.trackTargetOnMap = this.buttons.trackTargetBtn.checked;
+        this.trackUserLocationOnMap = this.buttons.trackUserLocationBtn.checked;
+        this.drawTrackedVehicleRoute = this.buttons.drawTrackedVehicleRouteBtn.checked;
+
         this.apiData = apiData;
         this.secondsToRefresh = this.apiData.refreshDataTime;
         this.addButtonEvents();
@@ -86,9 +93,12 @@ export class MapObj {
         this.buttons.showAllvehiclesBtn.addEventListener('change', () => this.toggleAllVehiclesVisibility(this.buttons.showAllvehiclesBtn));
         this.buttons.trackTargetBtn.addEventListener('change', () => this.toggleTrackTarget(this.buttons.trackTargetBtn));
         this.buttons.trackUserLocationBtn.addEventListener('change', () => this.toggleTrackuser(this.buttons.trackUserLocationBtn));
+        this.buttons.drawTrackedVehicleRouteBtn.addEventListener('change', () => this.toggleDrawTrackedVehicleRoute(this.buttons.drawTrackedVehicleRouteBtn));
         this.buttons.refreshBtn.addEventListener('click', this.refreshAll.bind(this));
         this.selectInput.lineSelect.addEventListener('change', () => this.lineChange(this.selectInput.lineSelect.value));
-        this.selectInput.vehicleSelect.addEventListener('change', e => this.vehicleChange(this.selectInput.vehicleSelect.value));
+        this.selectInput.vehicleSelect.addEventListener('change', () => this.vehicleChange(this.selectInput.vehicleSelect.value));
+        this.selectInput.findVehicleByCode.addEventListener('submit', e => this.findForVehicleByCode(e, this.selectInput.findVehicleByCode));
+
     }
 
     fillSelects() {
@@ -109,7 +119,16 @@ export class MapObj {
         this.inputToFill.trackedVehicleSpeed.textContent = `${this.trackedVehicle.Speed} km/h `;
         this.inputToFill.trackedVehicleCode.textContent = this.trackedVehicle.VehicleCode;
         this.inputToFill.trackedVehicleRoute.textContent = this.trackedVehicle.routeName;
-        this.inputToFill.gpsSignal.textContent = this.trackedVehicle.GPSQuality;
+        this.inputToFill.trackedVehicleCodeSmall.textContent = this.trackedVehicle.VehicleCode;
+        this.inputToFill.trackedVehicleSpeedSmall.textContent = `${this.trackedVehicle.Speed} km/h `;
+    }
+    findForVehicleByCode(e, form) {
+        e.preventDefault();
+        const vehicleCode = form.querySelector('#find-vehicle').value;
+        if (vehicleCode) {
+            this.vehicleChange(vehicleCode);
+            flyToCords(this.map, this.trackedVehicle.cords);
+        }
     }
 
     toggleAllVehiclesVisibility(checkbox) {
@@ -119,6 +138,27 @@ export class MapObj {
             this.showAllVehiclesMarkers();
         } else
             this.removeAllvehiclesMarkers();
+    }
+
+    toggleTrackTarget(checkbox) {
+        this.trackTargetOnMap = checkbox.checked
+        if (checkbox.checked)
+            flyToCords(this.map, this.trackedVehicle.cords);
+    }
+
+    toggleTrackuser(checkbox) {
+        this.trackUserLocationOnMap = checkbox.checked
+        if (checkbox.checked) {
+            flyToCords(this.map, [this.userMarker._latlng.lat, this.userMarker._latlng.lng]);
+        }
+    }
+
+    toggleDrawTrackedVehicleRoute(checkbox) {
+        this.drawTrackedVehicleRoute = checkbox.checked;
+        this.routeTracker.setLatLngs(0);
+        if (this.drawTrackedVehicleRoute)
+            this.routeTracker.addLatLng(this.trackedVehicle.marker.getLatLng());
+
     }
 
     showAllVehiclesMarkers() {
@@ -137,29 +177,19 @@ export class MapObj {
         this.allVehicles.length = 0;
     }
 
-    lineChange(value, vehicleCode) {
+    lineChange(value) {
         this.trackedLine = value;
-
         this.apiData.lineVehicles = getLineVehicles(this.apiData.linesList, this.trackedLine)
-        if (!vehicleCode)
-            this.trackedVehicle.VehicleCode = this.apiData.lineVehicles[0];
-        else
-            this.trackedVehicle.VehicleCode = vehicleCode
-        this.trackedVehicle = this.getTrackedVehicleInfo();
-
-        if (this.trackTargetOnMap)
-            flyToCords(this.map, this.trackedVehicle.cords);
-
-        this.removeAllvehiclesMarkers();
-        if (this.showAllVehicles)
-            this.showAllVehiclesMarkers();
-        this.fillSelects();
-        this.fillInputs();
+        this.trackedVehicle.VehicleCode = this.apiData.lineVehicles[0];
+        this.vehicleChange()
     }
 
     vehicleChange(vehicleCode) {
-        this.trackedVehicle.VehicleCode = vehicleCode;
-        this.trackedVehicle = this.getTrackedVehicleInfo();
+        if (vehicleCode)
+            this.trackedVehicle.VehicleCode = vehicleCode;
+        this.getTrackedVehicleInfo(true);
+        this.routeTracker.setLatLngs(0);
+        this.routeTracker.addLatLng(this.trackedVehicle.marker.getLatLng());
 
         if (this.trackTargetOnMap)
             flyToCords(this.map, this.trackedVehicle.cords);
@@ -171,35 +201,26 @@ export class MapObj {
         this.fillInputs();
     }
 
-    getTrackedVehicleInfo() {
-        let tempMarker = this.trackedVehicle.marker
-        if (tempMarker)
-            this.map.removeLayer(tempMarker)
-        tempMarker = {};
-        let vehicle;
+    getTrackedVehicleInfo(refresh = false, change = false) {
+        let find = false
         this.apiData.vehiclesList.forEach(el => {
-            if (el.VehicleCode == this.trackedVehicle.VehicleCode)
-                vehicle = new Vehicle(el.VehicleCode, el.GPSQuality, [el.Lat, el.Lon], el.Speed, el.VehicleId, el.Line, this.apiData.routeList, this, 'busIcon');
+            if (el.VehicleCode == this.trackedVehicle.VehicleCode) {
+                find = true;
+                if (!refresh || change)
+                    this.trackedVehicle = new Vehicle(el.VehicleCode, el.GPSQuality, [el.Lat, el.Lon], el.Speed, el.VehicleId, el.Line, this.apiData.routeList, this, 'busIcon');
+                else {
+                    this.trackedVehicle.GPSQuality = el.GPSQuality;
+                    this.trackedVehicle.Speed = el.Speed;
+                    this.trackedVehicle.cords = [el.Lat, el.Lon];
+                    this.trackedVehicle.marker.setLatLng(this.trackedVehicle.cords);
+                }
+            }
         })
-        if (vehicle == undefined) {
-            alert('Twój pojazd nie jest już dłużej dostępny');
-        }
-        return vehicle;
-    }
-
-    toggleTrackTarget(checkbox) {
-        this.trackTargetOnMap = checkbox.checked
-        if (checkbox.checked)
-            flyToCords(this.map, this.trackedVehicle.cords);
-    }
-
-    toggleTrackuser(checkbox) {
-        this.trackUserLocationOnMap = checkbox.checked
-        if (checkbox.checked) {
-            flyToCords(this.map, [this.userMarker._latlng.lat, this.userMarker._latlng.lng]);
+        if (!find) {
+            this.trackedVehicle.VehicleCode = this.apiData.lineVehicles[0];
+            alert('Twój pojazd nie jest dostępny');
         }
     }
-
 
     start() {
         this.loadingAnimDiv.classList.remove('no-active');
@@ -212,12 +233,15 @@ export class MapObj {
                             this.apiData.updateTime = response.LastUpdateData;
                             this.apiData.vehiclesList = response.Vehicles;
                             this.apiData.linesList = getActualLineList(this.apiData.vehiclesList)
-                            console.log(this.apiData);
                             this.trackedLine = this.apiData.linesList[0].lineName;
-
                             this.apiData.lineVehicles = getLineVehicles(this.apiData.linesList, this.trackedLine)
                             this.trackedVehicle.VehicleCode = this.apiData.lineVehicles[0];
-                            this.trackedVehicle = this.getTrackedVehicleInfo();
+
+                            this.getTrackedVehicleInfo();
+                            this.routeTracker.setLatLngs(0);
+                            if (this.drawTrackedVehicleRoute)
+                                this.routeTracker.addLatLng(this.trackedVehicle.marker.getLatLng());
+
                             getUserLocation(this.map, false, this.markerIcons.userIcon, this.canTrackUser)
                                 .then((res) => this.userMarker = res)
                                 .finally(() => {
@@ -228,26 +252,18 @@ export class MapObj {
                                         const tmpCords = [this.userMarker._latlng.lat, this.userMarker._latlng.lng]
                                         flyToCords(this.map, tmpCords);
                                     }
-                                    this.showAllVehicles = this.buttons.showAllvehiclesBtn.checked
                                     if (this.showAllVehicles)
                                         this.showAllVehiclesMarkers();
                                     this.fillSelects();
                                     this.fillInputs();
-                                    this.secondsToRefresh = this.apiData.refreshDataTime;
-                                    this.timerInterval = setInterval(() => {
-                                        this.inputToFill.timeToRefresh.textContent = --this.secondsToRefresh;
-                                    }, 1000);
-                                    this.refreshInterval = setInterval(() => {
-                                        this.refreshAll();
-                                    }, this.secondsToRefresh * 1000);
+                                    this.timerInterval = setInterval(() => this.inputToFill.timeToRefresh.textContent = --this.secondsToRefresh, 1000);
+                                    this.refreshInterval = setInterval(() => this.refreshAll(), this.secondsToRefresh * 1000);
                                 })
                         } catch (err) {
                             console.error(err);
-                            alert('Wystąpił tymczasowy błąd prawdodpodobnie spowodowany brakiem danych z systemu Tristar. Spróbuj ponownie za kilka minut!');
+                            alert('START: Wystąpił tymczasowy błąd prawdopodobnie spowodowany brakiem danych z systemu Tristar. Spróbuj ponownie za kilka minut!');
                         }
                     })
-
-
             })
     }
 
@@ -264,7 +280,10 @@ export class MapObj {
                     this.canTrackUser = this.buttons.canTrackUserBtn.checked;
                     this.trackTargetOnMap = this.buttons.trackTargetBtn.checked;
                     this.trackUserLocationOnMap = this.buttons.trackUserLocationBtn.checked;
-                    this.trackedVehicle = this.getTrackedVehicleInfo();
+
+                    this.getTrackedVehicleInfo(true);
+                    if (this.drawTrackedVehicleRoute)
+                        this.routeTracker.addLatLng(this.trackedVehicle.marker.getLatLng());
 
                     getUserLocation(this.map, true, this.markerIcons.userIcon, this.canTrackUser)
                         .then((res) => {
@@ -290,9 +309,7 @@ export class MapObj {
                             this.fillInputs();
                             this.secondsToRefresh = this.apiData.refreshDataTime;
                             clearInterval(this.refreshInterval);
-                            this.refreshInterval = setInterval(() => {
-                                this.refreshAll();
-                            }, this.secondsToRefresh * 1000);
+                            this.refreshInterval = setInterval(() => this.refreshAll(), this.secondsToRefresh * 1000);
                         })
                 } catch (err) {
                     clearInterval(this.refreshInterval);
@@ -319,10 +336,9 @@ export class Vehicle {
             if (this.routeId == route.routeId)
                 this.routeName = route.routeLongName
         })
-
         this.marker = createPin(mapObj, this.cords, mapObj.markerIcons[icon]);
         if (this.routeName)
-            this.marker.bindPopup(createPopup(this, `ID: <b>${this.VehicleCode}</b> <br> Speed: <b>${this.Speed} km/h</b></br> <b>${this.routeName}</b>`, 'Śledz mnie', mapObj, mapObj.lineChange));
+            this.marker.bindPopup(createPopup(this, `ID: <b>${this.VehicleCode}</b> <br> Speed: <b>${this.Speed} km/h</b></br> <b>${this.routeName}</b>`, 'Śledz mnie', mapObj, mapObj.vehicleChange));
         else
             this.marker.bindPopup(`ID: <b>${this.VehicleCode}</b> <br> Speed: <b>${this.Speed} km/h</b></br><button class="popup-btn">Śledź mnie</button>`)
     }
@@ -333,20 +349,25 @@ const trackTargetBtn = document.querySelector('#track-target');
 const trackUserLocationBtn = document.querySelector('#track-user-position');
 const canTrackUserBtn = document.querySelector('#update-user-location');
 const showAllvehiclesBtn = document.querySelector('#show-all-vehicle');
+const drawTrackedVehicleRouteBtn = document.querySelector('#draw-vehicle-route');
 
 const loadingAnimDiv = document.querySelector('.loading-anim-div');
 
 const lineSelect = document.querySelector('#line-select')
 const vehicleSelect = document.querySelector('#vehicles-select');
+const findVehicleForm = document.querySelector('#find-vehicle-form');
 
 const vehiclesAmountSpan = document.querySelector('#vehicles-amount span');
 const trackedVehicleSpeedSpan = document.querySelector('#tracked-speed span');
 const trackedVehicleCodeSpan = document.querySelector('#tracked-code span');
 const trackedVehicleGpsSignalSpan = document.querySelector('#gps-signal span');
 const trackedVehicleRouteSpan = document.querySelector('#tracked-route span');
+const trackedVehicleCodeSmallSpn = document.querySelector('#vehicle-code-info');
+const trackedVehicleSpeedSmallSpn = document.querySelector('#vehicle-speed-info');
+
 const updateTimeSpan = document.querySelector('#update-time span');
 const timeToRefreshSpan = document.querySelector('#refresh-time span');
 
 const apiObj = new ApiData();
-const myMap = new MapObj(refreshBtn, trackTargetBtn, showAllvehiclesBtn, trackUserLocationBtn, canTrackUserBtn, lineSelect, vehicleSelect, vehiclesAmountSpan, updateTimeSpan, trackedVehicleSpeedSpan, trackedVehicleCodeSpan, trackedVehicleRouteSpan, trackedVehicleGpsSignalSpan, timeToRefreshSpan, loadingAnimDiv, apiObj);
+const myMap = new MapObj(refreshBtn, trackTargetBtn, showAllvehiclesBtn, trackUserLocationBtn, canTrackUserBtn, drawTrackedVehicleRouteBtn, lineSelect, vehicleSelect, findVehicleForm, vehiclesAmountSpan, updateTimeSpan, trackedVehicleSpeedSpan, trackedVehicleCodeSpan, trackedVehicleRouteSpan, trackedVehicleGpsSignalSpan, timeToRefreshSpan, loadingAnimDiv, trackedVehicleCodeSmallSpn, trackedVehicleSpeedSmallSpn, apiObj);
 myMap.start();

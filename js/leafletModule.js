@@ -18,6 +18,8 @@ export function createMap(startCoordinates = [54.49074313834612, 18.469270882244
         accessToken: 'pk.eyJ1IjoiemllbG9ueXkzIiwiYSI6ImNrZnlhcGIxbzFzcDgycHQ4cHV3N3F5bmIifQ.ZC3kl6eDh_Y4McuZgMWtZg'
     })
 
+    //cfm{s}.s-trojmiasto.pl/tiles/2011/{z}/{x}/{y}.jpg
+
     const myMap = L.map('mapid', {
         layers: [satelitteLayer, normalLayer],
         zoomControl: false
@@ -36,10 +38,51 @@ export function createMap(startCoordinates = [54.49074313834612, 18.469270882244
         position: 'bottomleft'
     }).addTo(myMap);
 
+
+    var popup = L.popup();
+
+
+    // var firstpolyline = new L.Polyline([
+    //     [54.5205, 18.4783],
+    //     [54.53, 18.50],
+    //     [54.5123, 18.5150],
+    // ], {
+    //     color: 'red',
+    //     weight: 5,
+    //     opacity: 0.9,
+    //     smoothFactor: 2
+    // }).addTo(myMap);
+
+    // function onMapClick(e) {
+    //     // firstpolyline.addLatLng(e.latlng);
+    //     popup
+    //         .setLatLng(e.latlng)
+    //         .setContent("You clicked the map at " + e.latlng.toString())
+    //         .openOn(myMap);
+    // }
+
+    // myMap.on('click', onMapClick);
+
     return myMap;
 }
 
+export function createTrackerLine(map) {
+    let firstpolyline = new L.Polyline([
+        [54.5205, 18.4783],
+        [54.53, 18.50],
+        [54.5123, 18.5150],
+    ], {
+        color: 'red',
+        weight: 5,
+        opacity: 0.9,
+        smoothFactor: 2
+    }).addTo(map);
+    console.log('elooo', firstpolyline);
+    return firstpolyline;
+}
+
 export function checkMouseClickCoordinates(e, map) {
+    console.log('dupa');
     popup
         .setLatLng(e.latlng)
         .setContent("You clicked the map at " + e.latlng.toString())
@@ -119,10 +162,11 @@ export function createPopup(vehicleObj, paragraphText, btn1Text, mapObj, functio
 
     popUp.setContent(container);
     let that = mapObj;
-    L.DomEvent.on(startBtn, 'click', () => {
-        mapObj.trackedVehicle.VehicleCode = vehicleObj.VehicleCode;
-        functionToRun.call(mapObj, vehicleObj.routeId, vehicleObj.VehicleCode);
-    })
+    if (functionToRun) {
+        L.DomEvent.on(startBtn, 'click', () => {
+            functionToRun.call(mapObj, vehicleObj.VehicleCode);
+        })
+    }
 
 
     return popUp;
