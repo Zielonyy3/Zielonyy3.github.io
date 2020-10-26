@@ -36,36 +36,55 @@
                         </form>
                     </div>
                 </div>
-                <div class="navbar-section">
+                <div class="navbar-section settings-section">
                     <h2 class="section-menu-title">Ustawienia</h2>
-                    <ul class="nav-list">
-                        <li>
-                            <p class="option-name">Aktualizuj swoją lokalizacje</p>
-                            <label for="update-user-location" class="switch-container">
-                                <input type="checkbox" class="switch-checkbox-input" name="update-user-location"
-                                    id="update-user-location" checked>
-                                <span class="switch-slider"></span>
-                            </label>
+                    <div class="nav-list-scroll">
+                        <ul class="nav-list">
+                            <li>
+                                <p class="option-name">Aktualizuj swoją lokalizacje</p>
+                                <label for="update-user-location" class="switch-container">
+                                    <input type="checkbox" class="switch-checkbox-input" name="update-user-location"
+                                        id="update-user-location" checked>
+                                    <span class="switch-slider"></span>
+                                </label>
 
-                        </li>
-                        <li>
-                            <p class="option-name">Rysuj trasę śledzonego pojazdu</p>
-                            <label for="draw-vehicle-route" class="switch-container">
-                                <input type="checkbox" class="switch-checkbox-input" name="draw-vehicle-route"
-                                    id="draw-vehicle-route" checked>
-                                <span class="switch-slider"></span>
-                            </label>
+                            </li>
+                            <li>
+                                <p class="option-name">Rysuj trasę śledzonego pojazdu</p>
+                                <label for="draw-vehicle-route" class="switch-container">
+                                    <input type="checkbox" class="switch-checkbox-input" name="draw-vehicle-route"
+                                        id="draw-vehicle-route" checked>
+                                    <span class="switch-slider"></span>
+                                </label>
 
-                        </li>
-                        <li>
-                            <p class="option-name">Pokazuj przystanki</p>
-                            <label for="show-stops-on-map" class="switch-container">
-                                <input type="checkbox" class="switch-checkbox-input" name="show-stops-on-map"
-                                    id="show-stops-on-map">
-                                <span class="switch-slider"></span>
+                            </li>
+                            <li>
+                                <p class="option-name">Pokazuj przystanki</p>
+                                <label for="show-stops-on-map" class="switch-container">
+                                    <input type="checkbox" class="switch-checkbox-input" name="show-stops-on-map"
+                                        id="show-stops-on-map">
+                                    <span class="switch-slider"></span>
 
-                        </li>
-                    </ul>
+                            </li>
+                            <li>
+                                <p class="option-name">Pokazuj informacje na powiększonej mapie</p>
+                                <label for="show-info-on-fullscreen" class="switch-container">
+                                    <input type="checkbox" class="switch-checkbox-input" name="show-info-on-fullscreen"
+                                        id="show-info-on-fullscreen" checked>
+                                    <span class="switch-slider"></span>
+
+                            </li>
+
+                            <li>
+                                <p class="option-name">Włącz stronę na pełen ekran</p>
+                                <label for="fullscreen-web" class="switch-container">
+                                    <input type="checkbox" class="switch-checkbox-input" name="fullscreen-web"
+                                        id="fullscreen-web">
+                                    <span class="switch-slider"></span>
+
+                            </li>
+                        </ul>
+                    </div>
                 </div>
                 <div class="navbar-section menu-contact">
                     <span>Zielonyy3</span> <span><a href="#">GitHub</a></span> <span><a href="#">Icons</a></span>
@@ -81,7 +100,7 @@
             </div>
             <div class="loading-anim-div no-active"></div>
             <div class="show-info-fullscreen">
-                <div class="vehicle-icon"></div>
+                <div class="vehicle-icon centre-on-vehicle"></div>
                 <div class="vehicle-info">
                     <span id='vehicle-code-info'>8518</span>
                     <span id='vehicle-speed-info'>65 km/h</span>

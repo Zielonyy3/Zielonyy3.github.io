@@ -26,8 +26,8 @@ export function createMap(startCoordinates = [54.49074313834612, 18.469270882244
     }).setView(startCoordinates, startZoom);
 
     const baseMaps = {
-        "Satelitte": satelitteLayer,
-        "Normal": normalLayer,
+        "Satelita": satelitteLayer,
+        "Normalny": normalLayer,
     }
 
     L.control.layers(baseMaps, undefined, {
@@ -121,11 +121,18 @@ export function getUserLocation(map, move = false, iconPNG = false, activeLocati
     })
 }
 
-export function flyToCords(map, cords) {
-    map.flyTo(cords, map.getZoom(), {
-        animate: true,
-        duration: .8
-    });
+export function flyToCords(map, cords, zoom = false) {
+    if (zoom) {
+        map.flyTo(cords, zoom, {
+            animate: true,
+            duration: .8
+        });
+    } else {
+        map.flyTo(cords, map.getZoom(), {
+            animate: true,
+            duration: .8
+        });
+    }
 }
 
 export function createPin(mapObj, cords, iconPNG = false) {

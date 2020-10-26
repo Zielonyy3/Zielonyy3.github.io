@@ -27,7 +27,7 @@ export class ApiData {
 }
 
 export class MapObj {
-    constructor(refreshBtn, trackTargetBtn, showAllvehiclesBtn, trackUserLocationBtn, canTrackUserBtn, drawTrackedVehicleRouteBtn, lineSelectInpt, vehicleSelectInpt, vehicleCodeForm, vehiclesAmountSpn, updateTimeSpn, trackedVehicleSpeedSpn, trackedVehicleCodeSpn, trackedVehicleRouteSpn, gpsSignalSpn, timeToRefreshSpn, loadingAnimDiv, trackedVehicleCodeSmallSpn, trackedVehicleSpeedSmallSpn, apiData) {
+    constructor(refreshBtn, trackTargetBtn, showAllvehiclesBtn, trackUserLocationBtn, canTrackUserBtn, drawTrackedVehicleRouteBtn, centreOnVehicleBtn, lineSelectInpt, vehicleSelectInpt, vehicleCodeForm, vehiclesAmountSpn, updateTimeSpn, trackedVehicleSpeedSpn, trackedVehicleCodeSpn, trackedVehicleRouteSpn, gpsSignalSpn, timeToRefreshSpn, loadingAnimDiv, trackedVehicleCodeSmallSpn, trackedVehicleSpeedSmallSpn, apiData) {
         this.map = createMap(undefined, 12);
         this.routeTracker = createTrackerLine(this.map);
         this.trackedLine = -1;
@@ -61,6 +61,7 @@ export class MapObj {
             trackUserLocationBtn: trackUserLocationBtn,
             canTrackUserBtn: canTrackUserBtn,
             drawTrackedVehicleRouteBtn: drawTrackedVehicleRouteBtn,
+            centreOnVehicleBtn: centreOnVehicleBtn,
         };
         this.selectInput = {
             lineSelect: lineSelectInpt,
@@ -95,10 +96,10 @@ export class MapObj {
         this.buttons.trackUserLocationBtn.addEventListener('change', () => this.toggleTrackuser(this.buttons.trackUserLocationBtn));
         this.buttons.drawTrackedVehicleRouteBtn.addEventListener('change', () => this.toggleDrawTrackedVehicleRoute(this.buttons.drawTrackedVehicleRouteBtn));
         this.buttons.refreshBtn.addEventListener('click', this.refreshAll.bind(this));
+        this.buttons.centreOnVehicleBtn.addEventListener('click', () => flyToCords(this.map, this.trackedVehicle.cords, 17));
         this.selectInput.lineSelect.addEventListener('change', () => this.lineChange(this.selectInput.lineSelect.value));
         this.selectInput.vehicleSelect.addEventListener('change', () => this.vehicleChange(this.selectInput.vehicleSelect.value));
         this.selectInput.findVehicleByCode.addEventListener('submit', e => this.findForVehicleByCode(e, this.selectInput.findVehicleByCode));
-
     }
 
     fillSelects() {
@@ -128,6 +129,8 @@ export class MapObj {
         if (vehicleCode) {
             this.vehicleChange(vehicleCode);
             flyToCords(this.map, this.trackedVehicle.cords);
+            console.log(e.target);
+            form.querySelector('#find-vehicle').value = '';
         }
     }
 
@@ -338,7 +341,7 @@ export class Vehicle {
         })
         this.marker = createPin(mapObj, this.cords, mapObj.markerIcons[icon]);
         if (this.routeName)
-            this.marker.bindPopup(createPopup(this, `ID: <b>${this.VehicleCode}</b> <br> Speed: <b>${this.Speed} km/h</b></br> <b>${this.routeName}</b>`, 'Śledz mnie', mapObj, mapObj.vehicleChange));
+            this.marker.bindPopup(createPopup(this, `ID: <b>${this.VehicleCode}</b> <br> Speed: <b>${this.Speed} km/h</b></br> <b class="route-name">${this.routeName}</b>`, 'Śledz mnie', mapObj, mapObj.vehicleChange));
         else
             this.marker.bindPopup(`ID: <b>${this.VehicleCode}</b> <br> Speed: <b>${this.Speed} km/h</b></br><button class="popup-btn">Śledź mnie</button>`)
     }
@@ -350,6 +353,7 @@ const trackUserLocationBtn = document.querySelector('#track-user-position');
 const canTrackUserBtn = document.querySelector('#update-user-location');
 const showAllvehiclesBtn = document.querySelector('#show-all-vehicle');
 const drawTrackedVehicleRouteBtn = document.querySelector('#draw-vehicle-route');
+const centreOnVehicleBtn = document.querySelector('.centre-on-vehicle');
 
 const loadingAnimDiv = document.querySelector('.loading-anim-div');
 
@@ -369,5 +373,5 @@ const updateTimeSpan = document.querySelector('#update-time span');
 const timeToRefreshSpan = document.querySelector('#refresh-time span');
 
 const apiObj = new ApiData();
-const myMap = new MapObj(refreshBtn, trackTargetBtn, showAllvehiclesBtn, trackUserLocationBtn, canTrackUserBtn, drawTrackedVehicleRouteBtn, lineSelect, vehicleSelect, findVehicleForm, vehiclesAmountSpan, updateTimeSpan, trackedVehicleSpeedSpan, trackedVehicleCodeSpan, trackedVehicleRouteSpan, trackedVehicleGpsSignalSpan, timeToRefreshSpan, loadingAnimDiv, trackedVehicleCodeSmallSpn, trackedVehicleSpeedSmallSpn, apiObj);
+const myMap = new MapObj(refreshBtn, trackTargetBtn, showAllvehiclesBtn, trackUserLocationBtn, canTrackUserBtn, drawTrackedVehicleRouteBtn, centreOnVehicleBtn, lineSelect, vehicleSelect, findVehicleForm, vehiclesAmountSpan, updateTimeSpan, trackedVehicleSpeedSpan, trackedVehicleCodeSpan, trackedVehicleRouteSpan, trackedVehicleGpsSignalSpan, timeToRefreshSpan, loadingAnimDiv, trackedVehicleCodeSmallSpn, trackedVehicleSpeedSmallSpn, apiObj);
 myMap.start();

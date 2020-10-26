@@ -94,12 +94,29 @@ class InformationMenu {
 }
 
 class FullScreen {
-    constructor(fullScreenButton, fullScreenMap, fullscreenInfoDiv) {
+    constructor(fullScreenButton, fullScreenMap, fullscreenInfoDiv, centreOnVehicleBtn, fullScreenInfoDivSwitch) {
         this.fullScreenBtn = fullScreenButton;
         this.fullScreenMap = fullScreenMap;
         this.fullscreenInfoDiv = fullscreenInfoDiv;
+        this.centreOnVehicleBtn = centreOnVehicleBtn;
+        this.fullScreenInfoDivSwitch = fullScreenInfoDivSwitch;
 
         this.fullScreenBtn.addEventListener('click', () => this.showFullScreenMap())
+        this.fullScreenInfoDivSwitch.addEventListener('click', e => {
+            if (e.target.checked && this.fullScreenMap.classList.contains('fullscreen-map')) {
+                this.fullscreenInfoDiv.classList.remove('hide-transition-class');
+                this.fullscreenInfoDiv.classList.add('info-fullscreen-active');
+            } else if (!e.target.checked) {
+                this.fullscreenInfoDiv.classList.add('hide-transition-class');
+                this.fullscreenInfoDiv.classList.remove('info-fullscreen-active');
+            }
+        })
+        this.centreOnVehicleBtn.addEventListener('click', e => {
+            if (!e.target.classList.contains('vehicle-icon-clicked')) {
+                e.target.classList.add('vehicle-icon-clicked');
+                setTimeout(() => e.target.classList.remove('vehicle-icon-clicked'), 300)
+            }
+        })
     }
     showFullScreenMap() {
         this.fullScreenBtn.removeEventListener('click', () => this.showFullScreenMap());
@@ -108,15 +125,18 @@ class FullScreen {
             this.fullScreenBtn.children[0].classList.remove('fa-chevron-down');
             this.fullScreenBtn.children[0].classList.add('fa-chevron-up');
             this.fullScreenMap.classList.add('fullscreen-map');
-            this.fullscreenInfoDiv.classList.remove('hide-transition-class');
-            this.fullscreenInfoDiv.classList.add('info-fullscreen-active');
+            if (this.fullScreenInfoDivSwitch.checked) {
+                this.fullscreenInfoDiv.classList.remove('hide-transition-class');
+                this.fullscreenInfoDiv.classList.add('info-fullscreen-active');
+            }
         } else {
             this.fullScreenBtn.children[0].classList.remove('fa-chevron-up');
             this.fullScreenBtn.children[0].classList.add('fa-chevron-down');
             this.fullScreenMap.classList.remove('fullscreen-map');
-            this.fullscreenInfoDiv.classList.add('hide-transition-class');
-            this.fullscreenInfoDiv.classList.remove('info-fullscreen-active');
-
+            if (this.fullScreenInfoDivSwitch.checked) {
+                this.fullscreenInfoDiv.classList.add('hide-transition-class');
+                this.fullscreenInfoDiv.classList.remove('info-fullscreen-active');
+            }
         }
         setTimeout(() => this.fullScreenBtn.addEventListener('click', () => this.showFullScreenMap), 0.2 * 1000)
 
@@ -143,8 +163,22 @@ class OneOptionSelect {
 
 const navBarObj = new NavBar(document.querySelector('.nav-container'), document.querySelector('.nav-btn'));
 const infoMenu = new InformationMenu(document.querySelector('#info-container'), document.querySelector('.buttons-container'));
-const fullScreenObj = new FullScreen(document.querySelector('.show-fullscreen'), document.querySelector('#mapid'), document.querySelector('.show-info-fullscreen'));
+const fullScreenObj = new FullScreen(document.querySelector('.show-fullscreen'), document.querySelector('#mapid'), document.querySelector('.show-info-fullscreen'), document.querySelector('.centre-on-vehicle'), document.querySelector('#show-info-on-fullscreen'));
 const oneOptionObj = new OneOptionSelect(document.querySelector('#track-user-position'), document.querySelector('#track-target'));
+
+const fullScreenSwitch = document.querySelector('#fullscreen-web')
+fullScreenSwitch.addEventListener('change', e => {
+    console.log(fullScreenSwitch);
+    if (e.target.checked) {
+        console.log('full!');
+        document.body.requestFullscreen();
+    } else {
+        console.log('wylacz');
+        document.exitFullscreen();
+    }
+})
+
+
 
 const refreshBtn = document.querySelector('#refresh');
 refreshBtn.addEventListener('click', e => {
