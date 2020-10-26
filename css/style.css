@@ -622,7 +622,7 @@ button:focus {
 /* leaflet popups */
 .leaflet-popup-content-wrapper {
     box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.4);
-    max-width: 30vw;
+    /* max-width: 30vw; */
 }
 
 .leaflet-popup-content-wrapper .leaflet-popup-content {
@@ -695,5 +695,9 @@ button:focus {
 
     .buttons-container>button {
         margin: 0 3rem;
+    }
+
+    .leaflet-popup-content-wrapper {
+        max-width: 30vw;
     }
 }
